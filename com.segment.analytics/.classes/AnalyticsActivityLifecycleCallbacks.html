@@ -1,0 +1,360 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AnalyticsActivityLifecycleCallbacks</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.segment.analytics</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AnalyticsActivityLifecycleCallbacks (com.segment.analytics)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AnalyticsActivityLifecycleCallbacks</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 51)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">AnalyticsActivityLifecycleCallbacks$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">AnalyticsActivityLifecycleCallbacks$Builder</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 16)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 69)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/**
+<i>2</i>&nbsp; * The MIT License (MIT)
+<i>3</i>&nbsp; *
+<i>4</i>&nbsp; * Copyright (c) 2014 Segment.io, Inc.
+<i>5</i>&nbsp; *
+<i>6</i>&nbsp; * Permission is hereby granted, free of charge, to any person obtaining a copy
+<i>7</i>&nbsp; * of this software and associated documentation files (the &quot;Software&quot;), to deal
+<i>8</i>&nbsp; * in the Software without restriction, including without limitation the rights
+<i>9</i>&nbsp; * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<i>10</i>&nbsp; * copies of the Software, and to permit persons to whom the Software is
+<i>11</i>&nbsp; * furnished to do so, subject to the following conditions:
+<i>12</i>&nbsp; *
+<i>13</i>&nbsp; * The above copyright notice and this permission notice shall be included in all
+<i>14</i>&nbsp; * copies or substantial portions of the Software.
+<i>15</i>&nbsp; *
+<i>16</i>&nbsp; * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<i>17</i>&nbsp; * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<i>18</i>&nbsp; * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<i>19</i>&nbsp; * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<i>20</i>&nbsp; * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<i>21</i>&nbsp; * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<i>22</i>&nbsp; * SOFTWARE.
+<i>23</i>&nbsp; */
+<i>24</i>&nbsp;package com.segment.analytics;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;import android.app.Activity;
+<i>27</i>&nbsp;import android.app.Application;
+<i>28</i>&nbsp;import android.content.Intent;
+<i>29</i>&nbsp;import android.content.pm.PackageInfo;
+<i>30</i>&nbsp;import android.net.Uri;
+<i>31</i>&nbsp;import android.os.Bundle;
+<i>32</i>&nbsp;import androidx.annotation.NonNull;
+<i>33</i>&nbsp;import androidx.lifecycle.DefaultLifecycleObserver;
+<i>34</i>&nbsp;import androidx.lifecycle.LifecycleOwner;
+<i>35</i>&nbsp;import java.util.concurrent.ExecutorService;
+<i>36</i>&nbsp;import java.util.concurrent.atomic.AtomicBoolean;
+<i>37</i>&nbsp;import java.util.concurrent.atomic.AtomicInteger;
+<i>38</i>&nbsp;
+<b class="nc"><i>39</i>&nbsp;class AnalyticsActivityLifecycleCallbacks</b>
+<i>40</i>&nbsp;    implements Application.ActivityLifecycleCallbacks, DefaultLifecycleObserver {
+<i>41</i>&nbsp;  private Analytics analytics;
+<i>42</i>&nbsp;  private ExecutorService analyticsExecutor;
+<i>43</i>&nbsp;  private Boolean shouldTrackApplicationLifecycleEvents;
+<i>44</i>&nbsp;  private Boolean trackAttributionInformation;
+<i>45</i>&nbsp;  private Boolean trackDeepLinks;
+<i>46</i>&nbsp;  private Boolean shouldRecordScreenViews;
+<i>47</i>&nbsp;  private PackageInfo packageInfo;
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;  private AtomicBoolean trackedApplicationLifecycleEvents;
+<i>50</i>&nbsp;  private AtomicInteger numberOfActivities;
+<i>51</i>&nbsp;  private AtomicBoolean firstLaunch;
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;  private AnalyticsActivityLifecycleCallbacks(
+<i>54</i>&nbsp;      Analytics analytics,
+<i>55</i>&nbsp;      ExecutorService analyticsExecutor,
+<i>56</i>&nbsp;      Boolean shouldTrackApplicationLifecycleEvents,
+<i>57</i>&nbsp;      Boolean trackAttributionInformation,
+<i>58</i>&nbsp;      Boolean trackDeepLinks,
+<i>59</i>&nbsp;      Boolean shouldRecordScreenViews,
+<b class="nc"><i>60</i>&nbsp;      PackageInfo packageInfo) {</b>
+<b class="nc"><i>61</i>&nbsp;    this.trackedApplicationLifecycleEvents = new AtomicBoolean(false);</b>
+<b class="nc"><i>62</i>&nbsp;    this.numberOfActivities = new AtomicInteger(1);</b>
+<b class="nc"><i>63</i>&nbsp;    this.firstLaunch = new AtomicBoolean(false);</b>
+<b class="nc"><i>64</i>&nbsp;    this.analytics = analytics;</b>
+<b class="nc"><i>65</i>&nbsp;    this.analyticsExecutor = analyticsExecutor;</b>
+<b class="nc"><i>66</i>&nbsp;    this.shouldTrackApplicationLifecycleEvents = shouldTrackApplicationLifecycleEvents;</b>
+<b class="nc"><i>67</i>&nbsp;    this.trackAttributionInformation = trackAttributionInformation;</b>
+<b class="nc"><i>68</i>&nbsp;    this.trackDeepLinks = trackDeepLinks;</b>
+<b class="nc"><i>69</i>&nbsp;    this.shouldRecordScreenViews = shouldRecordScreenViews;</b>
+<b class="nc"><i>70</i>&nbsp;    this.packageInfo = packageInfo;</b>
+<i>71</i>&nbsp;  }
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;  public void onStop(@NonNull LifecycleOwner owner) {
+<i>74</i>&nbsp;    // App in background
+<b class="nc"><i>75</i>&nbsp;    if (shouldTrackApplicationLifecycleEvents) {</b>
+<b class="nc"><i>76</i>&nbsp;      analytics.track(&quot;Application Backgrounded&quot;);</b>
+<i>77</i>&nbsp;    }
+<i>78</i>&nbsp;  }
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;  public void onStart(@NonNull LifecycleOwner owner) {
+<i>81</i>&nbsp;    // App in foreground
+<b class="nc"><i>82</i>&nbsp;    if (shouldTrackApplicationLifecycleEvents) {</b>
+<b class="nc"><i>83</i>&nbsp;      Properties properties = new Properties();</b>
+<b class="nc"><i>84</i>&nbsp;      if (firstLaunch.get()) {</b>
+<b class="nc"><i>85</i>&nbsp;        properties</b>
+<b class="nc"><i>86</i>&nbsp;            .putValue(&quot;version&quot;, packageInfo.versionName)</b>
+<b class="nc"><i>87</i>&nbsp;            .putValue(&quot;build&quot;, String.valueOf(packageInfo.versionCode));</b>
+<i>88</i>&nbsp;      }
+<b class="nc"><i>89</i>&nbsp;      properties.putValue(&quot;from_background&quot;, !firstLaunch.getAndSet(false));</b>
+<b class="nc"><i>90</i>&nbsp;      analytics.track(&quot;Application Opened&quot;, properties);</b>
+<i>91</i>&nbsp;    }
+<i>92</i>&nbsp;  }
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;  public void onCreate(@NonNull LifecycleOwner owner) {
+<i>95</i>&nbsp;    // App created
+<b class="nc"><i>96</i>&nbsp;    if (!trackedApplicationLifecycleEvents.getAndSet(true)</b>
+<b class="nc"><i>97</i>&nbsp;        &amp;&amp; shouldTrackApplicationLifecycleEvents) {</b>
+<b class="nc"><i>98</i>&nbsp;      numberOfActivities.set(0);</b>
+<b class="nc"><i>99</i>&nbsp;      firstLaunch.set(true);</b>
+<b class="nc"><i>100</i>&nbsp;      analytics.trackApplicationLifecycleEvents();</b>
+<i>101</i>&nbsp;
+<b class="nc"><i>102</i>&nbsp;      if (trackAttributionInformation) {</b>
+<b class="nc"><i>103</i>&nbsp;        analyticsExecutor.submit(</b>
+<b class="nc"><i>104</i>&nbsp;            new Runnable() {</b>
+<i>105</i>&nbsp;              @Override
+<i>106</i>&nbsp;              public void run() {
+<b class="nc"><i>107</i>&nbsp;                analytics.trackAttributionInformation();</b>
+<i>108</i>&nbsp;              }
+<i>109</i>&nbsp;            });
+<i>110</i>&nbsp;      }
+<i>111</i>&nbsp;    }
+<i>112</i>&nbsp;  }
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;  @Override
+<i>115</i>&nbsp;  public void onActivityCreated(Activity activity, Bundle bundle) {
+<b class="nc"><i>116</i>&nbsp;    analytics.runOnMainThread(IntegrationOperation.onActivityCreated(activity, bundle));</b>
+<i>117</i>&nbsp;
+<b class="nc"><i>118</i>&nbsp;    if (trackDeepLinks) {</b>
+<b class="nc"><i>119</i>&nbsp;      trackDeepLink(activity);</b>
+<i>120</i>&nbsp;    }
+<i>121</i>&nbsp;  }
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;  private void trackDeepLink(Activity activity) {
+<b class="nc"><i>124</i>&nbsp;    Intent intent = activity.getIntent();</b>
+<b class="nc"><i>125</i>&nbsp;    if (intent == null || intent.getData() == null) {</b>
+<i>126</i>&nbsp;      return;
+<i>127</i>&nbsp;    }
+<i>128</i>&nbsp;
+<b class="nc"><i>129</i>&nbsp;    Properties properties = new Properties();</b>
+<b class="nc"><i>130</i>&nbsp;    Uri uri = intent.getData();</b>
+<b class="nc"><i>131</i>&nbsp;    for (String parameter : uri.getQueryParameterNames()) {</b>
+<b class="nc"><i>132</i>&nbsp;      String value = uri.getQueryParameter(parameter);</b>
+<b class="nc"><i>133</i>&nbsp;      if (value != null &amp;&amp; !value.trim().isEmpty()) {</b>
+<b class="nc"><i>134</i>&nbsp;        properties.put(parameter, value);</b>
+<i>135</i>&nbsp;      }
+<b class="nc"><i>136</i>&nbsp;    }</b>
+<i>137</i>&nbsp;
+<b class="nc"><i>138</i>&nbsp;    properties.put(&quot;url&quot;, uri.toString());</b>
+<b class="nc"><i>139</i>&nbsp;    analytics.track(&quot;Deep Link Opened&quot;, properties);</b>
+<i>140</i>&nbsp;  }
+<i>141</i>&nbsp;
+<i>142</i>&nbsp;  @Override
+<i>143</i>&nbsp;  public void onActivityStarted(Activity activity) {
+<b class="nc"><i>144</i>&nbsp;    if (shouldRecordScreenViews) {</b>
+<b class="nc"><i>145</i>&nbsp;      analytics.recordScreenViews(activity);</b>
+<i>146</i>&nbsp;    }
+<b class="nc"><i>147</i>&nbsp;    analytics.runOnMainThread(IntegrationOperation.onActivityStarted(activity));</b>
+<i>148</i>&nbsp;  }
+<i>149</i>&nbsp;
+<i>150</i>&nbsp;  @Override
+<i>151</i>&nbsp;  public void onActivityResumed(Activity activity) {
+<b class="nc"><i>152</i>&nbsp;    analytics.runOnMainThread(IntegrationOperation.onActivityResumed(activity));</b>
+<i>153</i>&nbsp;  }
+<i>154</i>&nbsp;
+<i>155</i>&nbsp;  @Override
+<i>156</i>&nbsp;  public void onActivityPaused(Activity activity) {
+<b class="nc"><i>157</i>&nbsp;    analytics.runOnMainThread(IntegrationOperation.onActivityPaused(activity));</b>
+<i>158</i>&nbsp;  }
+<i>159</i>&nbsp;
+<i>160</i>&nbsp;  @Override
+<i>161</i>&nbsp;  public void onActivityStopped(Activity activity) {
+<b class="nc"><i>162</i>&nbsp;    analytics.runOnMainThread(IntegrationOperation.onActivityStopped(activity));</b>
+<i>163</i>&nbsp;  }
+<i>164</i>&nbsp;
+<i>165</i>&nbsp;  @Override
+<i>166</i>&nbsp;  public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
+<b class="nc"><i>167</i>&nbsp;    analytics.runOnMainThread(IntegrationOperation.onActivitySaveInstanceState(activity, bundle));</b>
+<i>168</i>&nbsp;  }
+<i>169</i>&nbsp;
+<i>170</i>&nbsp;  @Override
+<i>171</i>&nbsp;  public void onActivityDestroyed(Activity activity) {
+<b class="nc"><i>172</i>&nbsp;    analytics.runOnMainThread(IntegrationOperation.onActivityDestroyed(activity));</b>
+<i>173</i>&nbsp;  }
+<i>174</i>&nbsp;
+<i>175</i>&nbsp;  public static class Builder {
+<i>176</i>&nbsp;    private Analytics analytics;
+<i>177</i>&nbsp;    private ExecutorService analyticsExecutor;
+<i>178</i>&nbsp;    private Boolean shouldTrackApplicationLifecycleEvents;
+<i>179</i>&nbsp;    private Boolean trackAttributionInformation;
+<i>180</i>&nbsp;    private Boolean trackDeepLinks;
+<i>181</i>&nbsp;    private Boolean shouldRecordScreenViews;
+<i>182</i>&nbsp;    private PackageInfo packageInfo;
+<i>183</i>&nbsp;
+<b class="nc"><i>184</i>&nbsp;    public Builder() {}</b>
+<i>185</i>&nbsp;
+<i>186</i>&nbsp;    public Builder analytics(Analytics analytics) {
+<b class="nc"><i>187</i>&nbsp;      this.analytics = analytics;</b>
+<b class="nc"><i>188</i>&nbsp;      return this;</b>
+<i>189</i>&nbsp;    }
+<i>190</i>&nbsp;
+<i>191</i>&nbsp;    Builder analyticsExecutor(ExecutorService analyticsExecutor) {
+<b class="nc"><i>192</i>&nbsp;      this.analyticsExecutor = analyticsExecutor;</b>
+<b class="nc"><i>193</i>&nbsp;      return this;</b>
+<i>194</i>&nbsp;    }
+<i>195</i>&nbsp;
+<i>196</i>&nbsp;    Builder shouldTrackApplicationLifecycleEvents(Boolean shouldTrackApplicationLifecycleEvents) {
+<b class="nc"><i>197</i>&nbsp;      this.shouldTrackApplicationLifecycleEvents = shouldTrackApplicationLifecycleEvents;</b>
+<b class="nc"><i>198</i>&nbsp;      return this;</b>
+<i>199</i>&nbsp;    }
+<i>200</i>&nbsp;
+<i>201</i>&nbsp;    Builder trackAttributionInformation(Boolean trackAttributionInformation) {
+<b class="nc"><i>202</i>&nbsp;      this.trackAttributionInformation = trackAttributionInformation;</b>
+<b class="nc"><i>203</i>&nbsp;      return this;</b>
+<i>204</i>&nbsp;    }
+<i>205</i>&nbsp;
+<i>206</i>&nbsp;    Builder trackDeepLinks(Boolean trackDeepLinks) {
+<b class="nc"><i>207</i>&nbsp;      this.trackDeepLinks = trackDeepLinks;</b>
+<b class="nc"><i>208</i>&nbsp;      return this;</b>
+<i>209</i>&nbsp;    }
+<i>210</i>&nbsp;
+<i>211</i>&nbsp;    Builder shouldRecordScreenViews(Boolean shouldRecordScreenViews) {
+<b class="nc"><i>212</i>&nbsp;      this.shouldRecordScreenViews = shouldRecordScreenViews;</b>
+<b class="nc"><i>213</i>&nbsp;      return this;</b>
+<i>214</i>&nbsp;    }
+<i>215</i>&nbsp;
+<i>216</i>&nbsp;    Builder packageInfo(PackageInfo packageInfo) {
+<b class="nc"><i>217</i>&nbsp;      this.packageInfo = packageInfo;</b>
+<b class="nc"><i>218</i>&nbsp;      return this;</b>
+<i>219</i>&nbsp;    }
+<i>220</i>&nbsp;
+<i>221</i>&nbsp;    public AnalyticsActivityLifecycleCallbacks build() {
+<b class="nc"><i>222</i>&nbsp;      return new AnalyticsActivityLifecycleCallbacks(</b>
+<i>223</i>&nbsp;          analytics,
+<i>224</i>&nbsp;          analyticsExecutor,
+<i>225</i>&nbsp;          shouldTrackApplicationLifecycleEvents,
+<i>226</i>&nbsp;          trackAttributionInformation,
+<i>227</i>&nbsp;          trackDeepLinks,
+<i>228</i>&nbsp;          shouldRecordScreenViews,
+<i>229</i>&nbsp;          packageInfo);
+<i>230</i>&nbsp;    }
+<i>231</i>&nbsp;  }
+<i>232</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-24 19:51</div>
+</div>
+</body>
+</html>

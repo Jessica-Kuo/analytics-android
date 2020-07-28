@@ -1,0 +1,386 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Cartographer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.segment.analytics</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Cartographer (com.segment.analytics)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Cartographer</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 83)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Cartographer$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">Cartographer$Builder</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 6)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 90)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/**
+<i>2</i>&nbsp; * The MIT License (MIT)
+<i>3</i>&nbsp; *
+<i>4</i>&nbsp; * Copyright (c) 2014 Segment.io, Inc.
+<i>5</i>&nbsp; *
+<i>6</i>&nbsp; * Permission is hereby granted, free of charge, to any person obtaining a copy
+<i>7</i>&nbsp; * of this software and associated documentation files (the &quot;Software&quot;), to deal
+<i>8</i>&nbsp; * in the Software without restriction, including without limitation the rights
+<i>9</i>&nbsp; * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<i>10</i>&nbsp; * copies of the Software, and to permit persons to whom the Software is
+<i>11</i>&nbsp; * furnished to do so, subject to the following conditions:
+<i>12</i>&nbsp; *
+<i>13</i>&nbsp; * The above copyright notice and this permission notice shall be included in all
+<i>14</i>&nbsp; * copies or substantial portions of the Software.
+<i>15</i>&nbsp; *
+<i>16</i>&nbsp; * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<i>17</i>&nbsp; * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<i>18</i>&nbsp; * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<i>19</i>&nbsp; * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<i>20</i>&nbsp; * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<i>21</i>&nbsp; * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<i>22</i>&nbsp; * SOFTWARE.
+<i>23</i>&nbsp; */
+<i>24</i>&nbsp;package com.segment.analytics;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;import android.util.JsonReader;
+<i>27</i>&nbsp;import android.util.JsonToken;
+<i>28</i>&nbsp;import android.util.JsonWriter;
+<i>29</i>&nbsp;import java.io.IOException;
+<i>30</i>&nbsp;import java.io.Reader;
+<i>31</i>&nbsp;import java.io.StringReader;
+<i>32</i>&nbsp;import java.io.StringWriter;
+<i>33</i>&nbsp;import java.io.Writer;
+<i>34</i>&nbsp;import java.lang.reflect.Array;
+<i>35</i>&nbsp;import java.util.ArrayList;
+<i>36</i>&nbsp;import java.util.LinkedHashMap;
+<i>37</i>&nbsp;import java.util.List;
+<i>38</i>&nbsp;import java.util.Map;
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;/**
+<i>41</i>&nbsp; * Cartographer creates {@link Map} objects from JSON encoded streams and decodes {@link Map}
+<i>42</i>&nbsp; * objects into JSON streams. Use {@link Builder} to construct instances.
+<i>43</i>&nbsp; */
+<i>44</i>&nbsp;public class Cartographer {
+<b class="nc"><i>45</i>&nbsp;  static final Cartographer INSTANCE = new Builder().lenient(true).prettyPrint(false).build();</b>
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;  private final boolean isLenient;
+<i>48</i>&nbsp;  private final boolean prettyPrint;
+<i>49</i>&nbsp;
+<b class="nc"><i>50</i>&nbsp;  Cartographer(boolean isLenient, boolean prettyPrint) {</b>
+<b class="nc"><i>51</i>&nbsp;    this.isLenient = isLenient;</b>
+<b class="nc"><i>52</i>&nbsp;    this.prettyPrint = prettyPrint;</b>
+<i>53</i>&nbsp;  }
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;  /**
+<i>56</i>&nbsp;   * Deserializes the specified json into a {@link Map}. If you have the Json in a {@link Reader}
+<i>57</i>&nbsp;   * form instead of a {@link String}, use {@link #fromJson(Reader)} instead.
+<i>58</i>&nbsp;   */
+<i>59</i>&nbsp;  public Map&lt;String, Object&gt; fromJson(String json) throws IOException {
+<b class="nc"><i>60</i>&nbsp;    if (json == null) {</b>
+<b class="nc"><i>61</i>&nbsp;      throw new IllegalArgumentException(&quot;json == null&quot;);</b>
+<i>62</i>&nbsp;    }
+<b class="nc"><i>63</i>&nbsp;    if (json.length() == 0) {</b>
+<b class="nc"><i>64</i>&nbsp;      throw new IllegalArgumentException(&quot;json empty&quot;);</b>
+<i>65</i>&nbsp;    }
+<b class="nc"><i>66</i>&nbsp;    return fromJson(new StringReader(json));</b>
+<i>67</i>&nbsp;  }
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;  /**
+<i>70</i>&nbsp;   * Deserializes the json read from the specified {@link Reader} into a {@link Map}. If you have
+<i>71</i>&nbsp;   * the Json in a String form instead of a {@link Reader}, use {@link #fromJson(String)} instead.
+<i>72</i>&nbsp;   */
+<i>73</i>&nbsp;  public Map&lt;String, Object&gt; fromJson(Reader reader) throws IOException {
+<b class="nc"><i>74</i>&nbsp;    if (reader == null) {</b>
+<b class="nc"><i>75</i>&nbsp;      throw new IllegalArgumentException(&quot;reader == null&quot;);</b>
+<i>76</i>&nbsp;    }
+<b class="nc"><i>77</i>&nbsp;    JsonReader jsonReader = new JsonReader(reader);</b>
+<b class="nc"><i>78</i>&nbsp;    jsonReader.setLenient(isLenient);</b>
+<i>79</i>&nbsp;    try {
+<b class="nc"><i>80</i>&nbsp;      return readerToMap(jsonReader);</b>
+<i>81</i>&nbsp;    } finally {
+<b class="nc"><i>82</i>&nbsp;      reader.close();</b>
+<b class="nc"><i>83</i>&nbsp;    }</b>
+<i>84</i>&nbsp;  }
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;  /**
+<i>87</i>&nbsp;   * Serializes the map into it&#39;s json representation and returns it as a String. If you want to
+<i>88</i>&nbsp;   * write the json to {@link Writer} instead of retrieving it as a String, use {@link #toJson(Map,
+<i>89</i>&nbsp;   * Writer)} instead.
+<i>90</i>&nbsp;   */
+<i>91</i>&nbsp;  public String toJson(Map&lt;?, ?&gt; map) {
+<b class="nc"><i>92</i>&nbsp;    StringWriter stringWriter = new StringWriter();</b>
+<i>93</i>&nbsp;    try {
+<b class="nc"><i>94</i>&nbsp;      toJson(map, stringWriter);</b>
+<b class="nc"><i>95</i>&nbsp;    } catch (IOException e) {</b>
+<b class="nc"><i>96</i>&nbsp;      throw new AssertionError(e); // No I/O writing to a Buffer.</b>
+<b class="nc"><i>97</i>&nbsp;    }</b>
+<b class="nc"><i>98</i>&nbsp;    return stringWriter.toString();</b>
+<i>99</i>&nbsp;  }
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;  /**
+<i>102</i>&nbsp;   * Serializes the map into it&#39;s json representation into the provided {@link Writer}. If you want
+<i>103</i>&nbsp;   * to retrieve the json as a string, use {@link #toJson(Map)} instead.
+<i>104</i>&nbsp;   */
+<i>105</i>&nbsp;  public void toJson(Map&lt;?, ?&gt; map, Writer writer) throws IOException {
+<b class="nc"><i>106</i>&nbsp;    if (map == null) {</b>
+<b class="nc"><i>107</i>&nbsp;      throw new IllegalArgumentException(&quot;map == null&quot;);</b>
+<i>108</i>&nbsp;    }
+<b class="nc"><i>109</i>&nbsp;    if (writer == null) {</b>
+<b class="nc"><i>110</i>&nbsp;      throw new IllegalArgumentException(&quot;writer == null&quot;);</b>
+<i>111</i>&nbsp;    }
+<i>112</i>&nbsp;
+<b class="nc"><i>113</i>&nbsp;    JsonWriter jsonWriter = new JsonWriter(writer);</b>
+<b class="nc"><i>114</i>&nbsp;    jsonWriter.setLenient(isLenient);</b>
+<b class="nc"><i>115</i>&nbsp;    if (prettyPrint) {</b>
+<b class="nc"><i>116</i>&nbsp;      jsonWriter.setIndent(&quot;  &quot;);</b>
+<i>117</i>&nbsp;    }
+<i>118</i>&nbsp;    try {
+<b class="nc"><i>119</i>&nbsp;      mapToWriter(map, jsonWriter);</b>
+<i>120</i>&nbsp;    } finally {
+<b class="nc"><i>121</i>&nbsp;      jsonWriter.close();</b>
+<b class="nc"><i>122</i>&nbsp;    }</b>
+<i>123</i>&nbsp;  }
+<i>124</i>&nbsp;
+<i>125</i>&nbsp;  // Decoding
+<i>126</i>&nbsp;
+<i>127</i>&nbsp;  /** Reads the {@link JsonReader} into a {@link Map}. */
+<i>128</i>&nbsp;  private static Map&lt;String, Object&gt; readerToMap(JsonReader reader) throws IOException {
+<b class="nc"><i>129</i>&nbsp;    Map&lt;String, Object&gt; map = new LinkedHashMap&lt;String, Object&gt;();</b>
+<b class="nc"><i>130</i>&nbsp;    reader.beginObject();</b>
+<b class="nc"><i>131</i>&nbsp;    while (reader.hasNext()) {</b>
+<b class="nc"><i>132</i>&nbsp;      map.put(reader.nextName(), readValue(reader));</b>
+<i>133</i>&nbsp;    }
+<b class="nc"><i>134</i>&nbsp;    reader.endObject();</b>
+<b class="nc"><i>135</i>&nbsp;    return map;</b>
+<i>136</i>&nbsp;  }
+<i>137</i>&nbsp;
+<i>138</i>&nbsp;  /** Reads the {@link JsonReader} into a {@link List}. */
+<i>139</i>&nbsp;  private static List&lt;Object&gt; readerToList(JsonReader reader) throws IOException {
+<i>140</i>&nbsp;    // todo: try to infer the type of the List?
+<b class="nc"><i>141</i>&nbsp;    List&lt;Object&gt; list = new ArrayList&lt;Object&gt;();</b>
+<b class="nc"><i>142</i>&nbsp;    reader.beginArray();</b>
+<b class="nc"><i>143</i>&nbsp;    while (reader.hasNext()) {</b>
+<b class="nc"><i>144</i>&nbsp;      list.add(readValue(reader));</b>
+<i>145</i>&nbsp;    }
+<b class="nc"><i>146</i>&nbsp;    reader.endArray();</b>
+<b class="nc"><i>147</i>&nbsp;    return list;</b>
+<i>148</i>&nbsp;  }
+<i>149</i>&nbsp;
+<i>150</i>&nbsp;  /** Reads the next value in the {@link JsonReader}. */
+<i>151</i>&nbsp;  private static Object readValue(JsonReader reader) throws IOException {
+<b class="nc"><i>152</i>&nbsp;    JsonToken token = reader.peek();</b>
+<b class="nc"><i>153</i>&nbsp;    switch (token) {</b>
+<i>154</i>&nbsp;      case BEGIN_OBJECT:
+<b class="nc"><i>155</i>&nbsp;        return readerToMap(reader);</b>
+<i>156</i>&nbsp;      case BEGIN_ARRAY:
+<b class="nc"><i>157</i>&nbsp;        return readerToList(reader);</b>
+<i>158</i>&nbsp;      case BOOLEAN:
+<b class="nc"><i>159</i>&nbsp;        return reader.nextBoolean();</b>
+<i>160</i>&nbsp;      case NULL:
+<b class="nc"><i>161</i>&nbsp;        reader.nextNull(); // consume the null token</b>
+<b class="nc"><i>162</i>&nbsp;        return null;</b>
+<i>163</i>&nbsp;      case NUMBER:
+<b class="nc"><i>164</i>&nbsp;        return reader.nextDouble();</b>
+<i>165</i>&nbsp;      case STRING:
+<b class="nc"><i>166</i>&nbsp;        return reader.nextString();</b>
+<i>167</i>&nbsp;      default:
+<b class="nc"><i>168</i>&nbsp;        throw new IllegalStateException(&quot;Invalid token &quot; + token);</b>
+<i>169</i>&nbsp;    }
+<i>170</i>&nbsp;  }
+<i>171</i>&nbsp;
+<i>172</i>&nbsp;  // Encoding
+<i>173</i>&nbsp;
+<i>174</i>&nbsp;  /** Encode the given {@link Map} into the {@link JsonWriter}. */
+<i>175</i>&nbsp;  private static void mapToWriter(Map&lt;?, ?&gt; map, JsonWriter writer) throws IOException {
+<b class="nc"><i>176</i>&nbsp;    writer.beginObject();</b>
+<b class="nc"><i>177</i>&nbsp;    for (Map.Entry&lt;?, ?&gt; entry : map.entrySet()) {</b>
+<b class="nc"><i>178</i>&nbsp;      writer.name(String.valueOf(entry.getKey()));</b>
+<b class="nc"><i>179</i>&nbsp;      writeValue(entry.getValue(), writer);</b>
+<b class="nc"><i>180</i>&nbsp;    }</b>
+<b class="nc"><i>181</i>&nbsp;    writer.endObject();</b>
+<i>182</i>&nbsp;  }
+<i>183</i>&nbsp;
+<i>184</i>&nbsp;  /** Print the json representation of a List to the given writer. */
+<i>185</i>&nbsp;  private static void listToWriter(List&lt;?&gt; list, JsonWriter writer) throws IOException {
+<b class="nc"><i>186</i>&nbsp;    writer.beginArray();</b>
+<b class="nc"><i>187</i>&nbsp;    for (Object value : list) {</b>
+<b class="nc"><i>188</i>&nbsp;      writeValue(value, writer);</b>
+<b class="nc"><i>189</i>&nbsp;    }</b>
+<b class="nc"><i>190</i>&nbsp;    writer.endArray();</b>
+<i>191</i>&nbsp;  }
+<i>192</i>&nbsp;
+<i>193</i>&nbsp;  /**
+<i>194</i>&nbsp;   * Print the json representation of an array to the given writer. Primitive arrays cannot be cast
+<i>195</i>&nbsp;   * to Object[], to this method accepts the raw object and uses {@link Array#getLength(Object)} and
+<i>196</i>&nbsp;   * {@link Array#get(Object, int)} to read the array.
+<i>197</i>&nbsp;   */
+<i>198</i>&nbsp;  private static void arrayToWriter(Object array, JsonWriter writer) throws IOException {
+<b class="nc"><i>199</i>&nbsp;    writer.beginArray();</b>
+<b class="nc"><i>200</i>&nbsp;    for (int i = 0, size = Array.getLength(array); i &lt; size; i++) {</b>
+<b class="nc"><i>201</i>&nbsp;      writeValue(Array.get(array, i), writer);</b>
+<i>202</i>&nbsp;    }
+<b class="nc"><i>203</i>&nbsp;    writer.endArray();</b>
+<i>204</i>&nbsp;  }
+<i>205</i>&nbsp;
+<i>206</i>&nbsp;  /**
+<i>207</i>&nbsp;   * Writes the given {@link Object} to the {@link JsonWriter}.
+<i>208</i>&nbsp;   *
+<i>209</i>&nbsp;   * @throws IOException
+<i>210</i>&nbsp;   */
+<i>211</i>&nbsp;  private static void writeValue(Object value, JsonWriter writer) throws IOException {
+<b class="nc"><i>212</i>&nbsp;    if (value == null) {</b>
+<b class="nc"><i>213</i>&nbsp;      writer.nullValue();</b>
+<b class="nc"><i>214</i>&nbsp;    } else if (value instanceof Number) {</b>
+<b class="nc"><i>215</i>&nbsp;      writer.value((Number) value);</b>
+<b class="nc"><i>216</i>&nbsp;    } else if (value instanceof Boolean) {</b>
+<b class="nc"><i>217</i>&nbsp;      writer.value((Boolean) value);</b>
+<b class="nc"><i>218</i>&nbsp;    } else if (value instanceof List) {</b>
+<b class="nc"><i>219</i>&nbsp;      listToWriter((List) value, writer);</b>
+<b class="nc"><i>220</i>&nbsp;    } else if (value instanceof Map) {</b>
+<b class="nc"><i>221</i>&nbsp;      mapToWriter((Map) value, writer);</b>
+<b class="nc"><i>222</i>&nbsp;    } else if (value.getClass().isArray()) {</b>
+<b class="nc"><i>223</i>&nbsp;      arrayToWriter(value, writer);</b>
+<i>224</i>&nbsp;    } else {
+<b class="nc"><i>225</i>&nbsp;      writer.value(String.valueOf(value));</b>
+<i>226</i>&nbsp;    }
+<i>227</i>&nbsp;  }
+<i>228</i>&nbsp;
+<i>229</i>&nbsp;  /** Fluent API to construct instances of {@link Cartographer}. */
+<b class="nc"><i>230</i>&nbsp;  public static class Builder {</b>
+<i>231</i>&nbsp;    private boolean isLenient;
+<i>232</i>&nbsp;    private boolean prettyPrint;
+<i>233</i>&nbsp;
+<i>234</i>&nbsp;    /**
+<i>235</i>&nbsp;     * Configure this parser to be be liberal in what it accepts. By default, this parser is strict
+<i>236</i>&nbsp;     * and only accepts JSON as specified by &lt;a href=&quot;http://www.ietf.org/rfc/rfc4627.txt&quot;&gt;RFC
+<i>237</i>&nbsp;     * 4627&lt;/a&gt;. See {@link JsonReader#setLenient(boolean)} for more details.
+<i>238</i>&nbsp;     * &lt;/ul&gt;
+<i>239</i>&nbsp;     */
+<i>240</i>&nbsp;    public Builder lenient(boolean isLenient) {
+<b class="nc"><i>241</i>&nbsp;      this.isLenient = isLenient;</b>
+<b class="nc"><i>242</i>&nbsp;      return this;</b>
+<i>243</i>&nbsp;    }
+<i>244</i>&nbsp;
+<i>245</i>&nbsp;    /**
+<i>246</i>&nbsp;     * Configures Cartographer to output Json that fits in a page for pretty printing. This option
+<i>247</i>&nbsp;     * only affects Json serialization.
+<i>248</i>&nbsp;     */
+<i>249</i>&nbsp;    public Builder prettyPrint(boolean prettyPrint) {
+<b class="nc"><i>250</i>&nbsp;      this.prettyPrint = prettyPrint;</b>
+<b class="nc"><i>251</i>&nbsp;      return this;</b>
+<i>252</i>&nbsp;    }
+<i>253</i>&nbsp;
+<i>254</i>&nbsp;    public Cartographer build() {
+<b class="nc"><i>255</i>&nbsp;      return new Cartographer(isLenient, prettyPrint);</b>
+<i>256</i>&nbsp;    }
+<i>257</i>&nbsp;  }
+<i>258</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-24 19:51</div>
+</div>
+</body>
+</html>

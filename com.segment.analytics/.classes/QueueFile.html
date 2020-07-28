@@ -1,0 +1,788 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: QueueFile</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.segment.analytics</a> ]
+</div>
+
+<h1>Coverage Summary for Class: QueueFile (com.segment.analytics)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">QueueFile</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 29)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 191)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">QueueFile$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 7)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">QueueFile$Element</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">QueueFile$ElementInputStream</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 18)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 37)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 221)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/**
+<i>2</i>&nbsp; * The MIT License (MIT)
+<i>3</i>&nbsp; *
+<i>4</i>&nbsp; * Copyright (c) 2014 Segment.io, Inc.
+<i>5</i>&nbsp; *
+<i>6</i>&nbsp; * Permission is hereby granted, free of charge, to any person obtaining a copy
+<i>7</i>&nbsp; * of this software and associated documentation files (the &quot;Software&quot;), to deal
+<i>8</i>&nbsp; * in the Software without restriction, including without limitation the rights
+<i>9</i>&nbsp; * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<i>10</i>&nbsp; * copies of the Software, and to permit persons to whom the Software is
+<i>11</i>&nbsp; * furnished to do so, subject to the following conditions:
+<i>12</i>&nbsp; *
+<i>13</i>&nbsp; * The above copyright notice and this permission notice shall be included in all
+<i>14</i>&nbsp; * copies or substantial portions of the Software.
+<i>15</i>&nbsp; *
+<i>16</i>&nbsp; * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<i>17</i>&nbsp; * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<i>18</i>&nbsp; * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<i>19</i>&nbsp; * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<i>20</i>&nbsp; * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<i>21</i>&nbsp; * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<i>22</i>&nbsp; * SOFTWARE.
+<i>23</i>&nbsp; */
+<i>24</i>&nbsp;package com.segment.analytics;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;import static java.lang.Math.min;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;import com.segment.analytics.internal.Private;
+<i>29</i>&nbsp;import java.io.Closeable;
+<i>30</i>&nbsp;import java.io.EOFException;
+<i>31</i>&nbsp;import java.io.File;
+<i>32</i>&nbsp;import java.io.FileNotFoundException;
+<i>33</i>&nbsp;import java.io.IOException;
+<i>34</i>&nbsp;import java.io.InputStream;
+<i>35</i>&nbsp;import java.io.RandomAccessFile;
+<i>36</i>&nbsp;import java.nio.channels.FileChannel;
+<i>37</i>&nbsp;import java.util.NoSuchElementException;
+<i>38</i>&nbsp;import java.util.logging.Level;
+<i>39</i>&nbsp;import java.util.logging.Logger;
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;/**
+<i>42</i>&nbsp; * A reliable, efficient, file-based, FIFO queue. Additions and removals are O(1). All operations
+<i>43</i>&nbsp; * are atomic. Writes are synchronous; data will be written to disk before an operation returns. The
+<i>44</i>&nbsp; * underlying file is structured to survive process and even system crashes. If an I/O exception is
+<i>45</i>&nbsp; * thrown during a mutating change, the change is aborted. It is safe to continue to use a {@code
+<i>46</i>&nbsp; * QueueFile} instance after an exception.
+<i>47</i>&nbsp; *
+<i>48</i>&nbsp; * &lt;p&gt;All operations are synchronized. In a traditional queue, the remove operation returns an
+<i>49</i>&nbsp; * element. In this queue, {@link #peek} and {@link #remove} are used in conjunction. Use {@code
+<i>50</i>&nbsp; * peek} to retrieve the first element, and then {@code remove} to remove it after successful
+<i>51</i>&nbsp; * processing. If the system crashes after {@code peek} and during processing, the element will
+<i>52</i>&nbsp; * remain in the queue, to be processed when the system restarts.
+<i>53</i>&nbsp; *
+<i>54</i>&nbsp; * &lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; The current implementation is built for file systems that support
+<i>55</i>&nbsp; * atomic segment writes (like YAFFS). Most conventional file systems don&#39;t support this; if the
+<i>56</i>&nbsp; * power goes out while writing a segment, the segment will contain garbage and the file will be
+<i>57</i>&nbsp; * corrupt. We&#39;ll add journaling support so this class can be used with more file systems later.
+<i>58</i>&nbsp; *
+<i>59</i>&nbsp; * @author Bob Lee (bob@squareup.com)
+<i>60</i>&nbsp; */
+<i>61</i>&nbsp;public class QueueFile implements Closeable {
+<b class="nc"><i>62</i>&nbsp;  private static final Logger LOGGER = Logger.getLogger(QueueFile.class.getName());</b>
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;  /** Initial file size in bytes. */
+<i>65</i>&nbsp;  private static final int INITIAL_LENGTH = 4096; // one file system block
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;  /** A block of nothing to write over old data. */
+<b class="nc"><i>68</i>&nbsp;  private static final byte[] ZEROES = new byte[INITIAL_LENGTH];</b>
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;  /** Length of header in bytes. */
+<i>71</i>&nbsp;  static final int HEADER_LENGTH = 16;
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;  /**
+<i>74</i>&nbsp;   * The underlying file. Uses a ring buffer to store entries. Designed so that a modification isn&#39;t
+<i>75</i>&nbsp;   * committed or visible until we write the header. The header is much smaller than a segment. So
+<i>76</i>&nbsp;   * long as the underlying file system supports atomic segment writes, changes to the queue are
+<i>77</i>&nbsp;   * atomic. Storing the file length ensures we can recover from a failed expansion (i.e. if setting
+<i>78</i>&nbsp;   * the file length succeeds but the process dies before the data can be copied).
+<i>79</i>&nbsp;   *
+<i>80</i>&nbsp;   * &lt;p&gt;
+<i>81</i>&nbsp;   *
+<i>82</i>&nbsp;   * &lt;pre&gt;
+<i>83</i>&nbsp;   *   Format:
+<i>84</i>&nbsp;   *     Header              (16 bytes)
+<i>85</i>&nbsp;   *     Element Ring Buffer (File Length - 16 bytes)
+<i>86</i>&nbsp;   * &lt;p/&gt;
+<i>87</i>&nbsp;   *   Header:
+<i>88</i>&nbsp;   *     File Length            (4 bytes)
+<i>89</i>&nbsp;   *     Element Count          (4 bytes)
+<i>90</i>&nbsp;   *     First Element Position (4 bytes, =0 if null)
+<i>91</i>&nbsp;   *     Last Element Position  (4 bytes, =0 if null)
+<i>92</i>&nbsp;   * &lt;p/&gt;
+<i>93</i>&nbsp;   *   Element:
+<i>94</i>&nbsp;   *     Length (4 bytes)
+<i>95</i>&nbsp;   *     Data   (Length bytes)
+<i>96</i>&nbsp;   * &lt;/pre&gt;
+<i>97</i>&nbsp;   *
+<i>98</i>&nbsp;   * Visible for testing.
+<i>99</i>&nbsp;   */
+<i>100</i>&nbsp;  final RandomAccessFile raf;
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;  /** Cached file length. Always a power of 2. */
+<i>103</i>&nbsp;  int fileLength;
+<i>104</i>&nbsp;
+<i>105</i>&nbsp;  /** Number of elements. */
+<i>106</i>&nbsp;  private int elementCount;
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;  /** Pointer to first (or eldest) element. */
+<i>109</i>&nbsp;  private Element first;
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;  /** Pointer to last (or newest) element. */
+<i>112</i>&nbsp;  private Element last;
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;  /** In-memory buffer. Big enough to hold the header. */
+<b class="nc"><i>115</i>&nbsp;  private final byte[] buffer = new byte[16];</b>
+<i>116</i>&nbsp;
+<i>117</i>&nbsp;  /**
+<i>118</i>&nbsp;   * Constructs a new queue backed by the given file. Only one instance should access a given file
+<i>119</i>&nbsp;   * at a time.
+<i>120</i>&nbsp;   */
+<b class="nc"><i>121</i>&nbsp;  public QueueFile(File file) throws IOException {</b>
+<b class="nc"><i>122</i>&nbsp;    if (!file.exists()) {</b>
+<b class="nc"><i>123</i>&nbsp;      initialize(file);</b>
+<i>124</i>&nbsp;    }
+<b class="nc"><i>125</i>&nbsp;    raf = open(file);</b>
+<b class="nc"><i>126</i>&nbsp;    readHeader();</b>
+<i>127</i>&nbsp;  }
+<i>128</i>&nbsp;
+<b class="nc"><i>129</i>&nbsp;  QueueFile(RandomAccessFile raf) throws IOException {</b>
+<b class="nc"><i>130</i>&nbsp;    this.raf = raf;</b>
+<b class="nc"><i>131</i>&nbsp;    readHeader();</b>
+<i>132</i>&nbsp;  }
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;  /**
+<i>135</i>&nbsp;   * Stores an {@code int} in the {@code byte[]}. The behavior is equivalent to calling {@link
+<i>136</i>&nbsp;   * RandomAccessFile#writeInt}.
+<i>137</i>&nbsp;   */
+<i>138</i>&nbsp;  private static void writeInt(byte[] buffer, int offset, int value) {
+<b class="nc"><i>139</i>&nbsp;    buffer[offset] = (byte) (value &gt;&gt; 24);</b>
+<b class="nc"><i>140</i>&nbsp;    buffer[offset + 1] = (byte) (value &gt;&gt; 16);</b>
+<b class="nc"><i>141</i>&nbsp;    buffer[offset + 2] = (byte) (value &gt;&gt; 8);</b>
+<b class="nc"><i>142</i>&nbsp;    buffer[offset + 3] = (byte) value;</b>
+<i>143</i>&nbsp;  }
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;  /** Reads an {@code int} from the {@code byte[]}. */
+<i>146</i>&nbsp;  private static int readInt(byte[] buffer, int offset) {
+<b class="nc"><i>147</i>&nbsp;    return ((buffer[offset] &amp; 0xff) &lt;&lt; 24)</b>
+<i>148</i>&nbsp;        + ((buffer[offset + 1] &amp; 0xff) &lt;&lt; 16)
+<i>149</i>&nbsp;        + ((buffer[offset + 2] &amp; 0xff) &lt;&lt; 8)
+<i>150</i>&nbsp;        + (buffer[offset + 3] &amp; 0xff);
+<i>151</i>&nbsp;  }
+<i>152</i>&nbsp;
+<i>153</i>&nbsp;  private void readHeader() throws IOException {
+<b class="nc"><i>154</i>&nbsp;    raf.seek(0);</b>
+<b class="nc"><i>155</i>&nbsp;    raf.readFully(buffer);</b>
+<b class="nc"><i>156</i>&nbsp;    fileLength = readInt(buffer, 0);</b>
+<b class="nc"><i>157</i>&nbsp;    elementCount = readInt(buffer, 4);</b>
+<b class="nc"><i>158</i>&nbsp;    int firstOffset = readInt(buffer, 8);</b>
+<b class="nc"><i>159</i>&nbsp;    int lastOffset = readInt(buffer, 12);</b>
+<i>160</i>&nbsp;
+<b class="nc"><i>161</i>&nbsp;    if (fileLength &gt; raf.length()) {</b>
+<b class="nc"><i>162</i>&nbsp;      throw new IOException(</b>
+<b class="nc"><i>163</i>&nbsp;          &quot;File is truncated. Expected length: &quot; + fileLength + &quot;, Actual length: &quot; + raf.length());</b>
+<b class="nc"><i>164</i>&nbsp;    } else if (fileLength &lt;= 0) {</b>
+<b class="nc"><i>165</i>&nbsp;      throw new IOException(</b>
+<i>166</i>&nbsp;          &quot;File is corrupt; length stored in header (&quot; + fileLength + &quot;) is invalid.&quot;);
+<b class="nc"><i>167</i>&nbsp;    } else if (firstOffset &lt; 0 || fileLength &lt;= wrapPosition(firstOffset)) {</b>
+<b class="nc"><i>168</i>&nbsp;      throw new IOException(</b>
+<i>169</i>&nbsp;          &quot;File is corrupt; first position stored in header (&quot; + firstOffset + &quot;) is invalid.&quot;);
+<b class="nc"><i>170</i>&nbsp;    } else if (lastOffset &lt; 0 || fileLength &lt;= wrapPosition(lastOffset)) {</b>
+<b class="nc"><i>171</i>&nbsp;      throw new IOException(</b>
+<i>172</i>&nbsp;          &quot;File is corrupt; last position stored in header (&quot; + lastOffset + &quot;) is invalid.&quot;);
+<i>173</i>&nbsp;    }
+<b class="nc"><i>174</i>&nbsp;    first = readElement(firstOffset);</b>
+<b class="nc"><i>175</i>&nbsp;    last = readElement(lastOffset);</b>
+<i>176</i>&nbsp;  }
+<i>177</i>&nbsp;
+<i>178</i>&nbsp;  /**
+<i>179</i>&nbsp;   * Writes header atomically. The arguments contain the updated values. The class member fields
+<i>180</i>&nbsp;   * should not have changed yet. This only updates the state in the file. It&#39;s up to the caller to
+<i>181</i>&nbsp;   * update the class member variables *after* this call succeeds. Assumes segment writes are atomic
+<i>182</i>&nbsp;   * in the underlying file system.
+<i>183</i>&nbsp;   */
+<i>184</i>&nbsp;  private void writeHeader(int fileLength, int elementCount, int firstPosition, int lastPosition)
+<i>185</i>&nbsp;      throws IOException {
+<b class="nc"><i>186</i>&nbsp;    writeInt(buffer, 0, fileLength);</b>
+<b class="nc"><i>187</i>&nbsp;    writeInt(buffer, 4, elementCount);</b>
+<b class="nc"><i>188</i>&nbsp;    writeInt(buffer, 8, firstPosition);</b>
+<b class="nc"><i>189</i>&nbsp;    writeInt(buffer, 12, lastPosition);</b>
+<b class="nc"><i>190</i>&nbsp;    raf.seek(0);</b>
+<b class="nc"><i>191</i>&nbsp;    raf.write(buffer);</b>
+<i>192</i>&nbsp;  }
+<i>193</i>&nbsp;
+<i>194</i>&nbsp;  private Element readElement(int position) throws IOException {
+<b class="nc"><i>195</i>&nbsp;    if (position == 0) return Element.NULL;</b>
+<b class="nc"><i>196</i>&nbsp;    ringRead(position, buffer, 0, Element.HEADER_LENGTH);</b>
+<b class="nc"><i>197</i>&nbsp;    int length = readInt(buffer, 0);</b>
+<b class="nc"><i>198</i>&nbsp;    return new Element(position, length);</b>
+<i>199</i>&nbsp;  }
+<i>200</i>&nbsp;
+<i>201</i>&nbsp;  private static void initialize(File file) throws IOException {
+<i>202</i>&nbsp;    // Use a temp file so we don&#39;t leave a partially-initialized file.
+<b class="nc"><i>203</i>&nbsp;    File tempFile = new File(file.getPath() + &quot;.tmp&quot;);</b>
+<b class="nc"><i>204</i>&nbsp;    RandomAccessFile raf = open(tempFile);</b>
+<i>205</i>&nbsp;    try {
+<b class="nc"><i>206</i>&nbsp;      raf.setLength(INITIAL_LENGTH);</b>
+<b class="nc"><i>207</i>&nbsp;      raf.seek(0);</b>
+<b class="nc"><i>208</i>&nbsp;      byte[] headerBuffer = new byte[16];</b>
+<b class="nc"><i>209</i>&nbsp;      writeInt(headerBuffer, 0, INITIAL_LENGTH);</b>
+<b class="nc"><i>210</i>&nbsp;      raf.write(headerBuffer);</b>
+<i>211</i>&nbsp;    } finally {
+<b class="nc"><i>212</i>&nbsp;      raf.close();</b>
+<b class="nc"><i>213</i>&nbsp;    }</b>
+<i>214</i>&nbsp;
+<i>215</i>&nbsp;    // A rename is atomic.
+<b class="nc"><i>216</i>&nbsp;    if (!tempFile.renameTo(file)) {</b>
+<b class="nc"><i>217</i>&nbsp;      throw new IOException(&quot;Rename failed!&quot;);</b>
+<i>218</i>&nbsp;    }
+<i>219</i>&nbsp;  }
+<i>220</i>&nbsp;
+<i>221</i>&nbsp;  /** Opens a random access file that writes synchronously. */
+<i>222</i>&nbsp;  private static RandomAccessFile open(File file) throws FileNotFoundException {
+<b class="nc"><i>223</i>&nbsp;    return new RandomAccessFile(file, &quot;rwd&quot;);</b>
+<i>224</i>&nbsp;  }
+<i>225</i>&nbsp;
+<i>226</i>&nbsp;  /** Wraps the position if it exceeds the end of the file. */
+<i>227</i>&nbsp;  @Private
+<i>228</i>&nbsp;  int wrapPosition(int position) {
+<b class="nc"><i>229</i>&nbsp;    return position &lt; fileLength ? position : HEADER_LENGTH + position - fileLength;</b>
+<i>230</i>&nbsp;  }
+<i>231</i>&nbsp;
+<i>232</i>&nbsp;  /**
+<i>233</i>&nbsp;   * Writes count bytes from buffer to position in file. Automatically wraps write if position is
+<i>234</i>&nbsp;   * past the end of the file or if buffer overlaps it.
+<i>235</i>&nbsp;   *
+<i>236</i>&nbsp;   * @param position in file to write to
+<i>237</i>&nbsp;   * @param buffer to write from
+<i>238</i>&nbsp;   * @param count # of bytes to write
+<i>239</i>&nbsp;   */
+<i>240</i>&nbsp;  private void ringWrite(int position, byte[] buffer, int offset, int count) throws IOException {
+<b class="nc"><i>241</i>&nbsp;    position = wrapPosition(position);</b>
+<b class="nc"><i>242</i>&nbsp;    if (position + count &lt;= fileLength) {</b>
+<b class="nc"><i>243</i>&nbsp;      raf.seek(position);</b>
+<b class="nc"><i>244</i>&nbsp;      raf.write(buffer, offset, count);</b>
+<i>245</i>&nbsp;    } else {
+<i>246</i>&nbsp;      // The write overlaps the EOF.
+<i>247</i>&nbsp;      // # of bytes to write before the EOF.
+<b class="nc"><i>248</i>&nbsp;      int beforeEof = fileLength - position;</b>
+<b class="nc"><i>249</i>&nbsp;      raf.seek(position);</b>
+<b class="nc"><i>250</i>&nbsp;      raf.write(buffer, offset, beforeEof);</b>
+<b class="nc"><i>251</i>&nbsp;      raf.seek(HEADER_LENGTH);</b>
+<b class="nc"><i>252</i>&nbsp;      raf.write(buffer, offset + beforeEof, count - beforeEof);</b>
+<i>253</i>&nbsp;    }
+<i>254</i>&nbsp;  }
+<i>255</i>&nbsp;
+<i>256</i>&nbsp;  private void ringErase(int position, int length) throws IOException {
+<b class="nc"><i>257</i>&nbsp;    while (length &gt; 0) {</b>
+<b class="nc"><i>258</i>&nbsp;      int chunk = min(length, ZEROES.length);</b>
+<b class="nc"><i>259</i>&nbsp;      ringWrite(position, ZEROES, 0, chunk);</b>
+<b class="nc"><i>260</i>&nbsp;      length -= chunk;</b>
+<b class="nc"><i>261</i>&nbsp;      position += chunk;</b>
+<b class="nc"><i>262</i>&nbsp;    }</b>
+<i>263</i>&nbsp;  }
+<i>264</i>&nbsp;
+<i>265</i>&nbsp;  /**
+<i>266</i>&nbsp;   * Reads count bytes into buffer from file. Wraps if necessary.
+<i>267</i>&nbsp;   *
+<i>268</i>&nbsp;   * @param position in file to read from
+<i>269</i>&nbsp;   * @param buffer to read into
+<i>270</i>&nbsp;   * @param count # of bytes to read
+<i>271</i>&nbsp;   */
+<i>272</i>&nbsp;  @Private
+<i>273</i>&nbsp;  void ringRead(int position, byte[] buffer, int offset, int count) throws IOException {
+<b class="nc"><i>274</i>&nbsp;    position = wrapPosition(position);</b>
+<b class="nc"><i>275</i>&nbsp;    if (position + count &lt;= fileLength) {</b>
+<b class="nc"><i>276</i>&nbsp;      raf.seek(position);</b>
+<b class="nc"><i>277</i>&nbsp;      raf.readFully(buffer, offset, count);</b>
+<i>278</i>&nbsp;    } else {
+<i>279</i>&nbsp;      // The read overlaps the EOF.
+<i>280</i>&nbsp;      // # of bytes to read before the EOF.
+<b class="nc"><i>281</i>&nbsp;      int beforeEof = fileLength - position;</b>
+<b class="nc"><i>282</i>&nbsp;      raf.seek(position);</b>
+<b class="nc"><i>283</i>&nbsp;      raf.readFully(buffer, offset, beforeEof);</b>
+<b class="nc"><i>284</i>&nbsp;      raf.seek(HEADER_LENGTH);</b>
+<b class="nc"><i>285</i>&nbsp;      raf.readFully(buffer, offset + beforeEof, count - beforeEof);</b>
+<i>286</i>&nbsp;    }
+<i>287</i>&nbsp;  }
+<i>288</i>&nbsp;
+<i>289</i>&nbsp;  /**
+<i>290</i>&nbsp;   * Adds an element to the end of the queue.
+<i>291</i>&nbsp;   *
+<i>292</i>&nbsp;   * @param data to copy bytes from
+<i>293</i>&nbsp;   */
+<i>294</i>&nbsp;  public void add(byte[] data) throws IOException {
+<b class="nc"><i>295</i>&nbsp;    add(data, 0, data.length);</b>
+<i>296</i>&nbsp;  }
+<i>297</i>&nbsp;
+<i>298</i>&nbsp;  /**
+<i>299</i>&nbsp;   * Adds an element to the end of the queue.
+<i>300</i>&nbsp;   *
+<i>301</i>&nbsp;   * @param data to copy bytes from
+<i>302</i>&nbsp;   * @param offset to start from in buffer
+<i>303</i>&nbsp;   * @param count number of bytes to copy
+<i>304</i>&nbsp;   * @throws IndexOutOfBoundsException if {@code offset &lt; 0} or {@code count &lt; 0}, or if {@code
+<i>305</i>&nbsp;   *     offset + count} is bigger than the length of {@code buffer}.
+<i>306</i>&nbsp;   */
+<i>307</i>&nbsp;  public synchronized void add(byte[] data, int offset, int count) throws IOException {
+<b class="nc"><i>308</i>&nbsp;    if (data == null) {</b>
+<b class="nc"><i>309</i>&nbsp;      throw new NullPointerException(&quot;data == null&quot;);</b>
+<i>310</i>&nbsp;    }
+<b class="nc"><i>311</i>&nbsp;    if ((offset | count) &lt; 0 || count &gt; data.length - offset) {</b>
+<b class="nc"><i>312</i>&nbsp;      throw new IndexOutOfBoundsException();</b>
+<i>313</i>&nbsp;    }
+<i>314</i>&nbsp;
+<b class="nc"><i>315</i>&nbsp;    expandIfNecessary(count);</b>
+<i>316</i>&nbsp;
+<i>317</i>&nbsp;    // Insert a new element after the current last element.
+<b class="nc"><i>318</i>&nbsp;    boolean wasEmpty = isEmpty();</b>
+<b class="nc"><i>319</i>&nbsp;    int position =</b>
+<i>320</i>&nbsp;        wasEmpty
+<i>321</i>&nbsp;            ? HEADER_LENGTH
+<b class="nc"><i>322</i>&nbsp;            : wrapPosition(last.position + Element.HEADER_LENGTH + last.length);</b>
+<b class="nc"><i>323</i>&nbsp;    Element newLast = new Element(position, count);</b>
+<i>324</i>&nbsp;
+<i>325</i>&nbsp;    // Write length.
+<b class="nc"><i>326</i>&nbsp;    writeInt(buffer, 0, count);</b>
+<b class="nc"><i>327</i>&nbsp;    ringWrite(newLast.position, buffer, 0, Element.HEADER_LENGTH);</b>
+<i>328</i>&nbsp;
+<i>329</i>&nbsp;    // Write data.
+<b class="nc"><i>330</i>&nbsp;    ringWrite(newLast.position + Element.HEADER_LENGTH, data, offset, count);</b>
+<i>331</i>&nbsp;
+<i>332</i>&nbsp;    // Commit the addition. If wasEmpty, first == last.
+<b class="nc"><i>333</i>&nbsp;    int firstPosition = wasEmpty ? newLast.position : first.position;</b>
+<b class="nc"><i>334</i>&nbsp;    writeHeader(fileLength, elementCount + 1, firstPosition, newLast.position);</b>
+<b class="nc"><i>335</i>&nbsp;    last = newLast;</b>
+<b class="nc"><i>336</i>&nbsp;    elementCount++;</b>
+<b class="nc"><i>337</i>&nbsp;    if (wasEmpty) first = last; // first element</b>
+<i>338</i>&nbsp;  }
+<i>339</i>&nbsp;
+<i>340</i>&nbsp;  private int usedBytes() {
+<b class="nc"><i>341</i>&nbsp;    if (elementCount == 0) return HEADER_LENGTH;</b>
+<i>342</i>&nbsp;
+<b class="nc"><i>343</i>&nbsp;    if (last.position &gt;= first.position) {</b>
+<i>344</i>&nbsp;      // Contiguous queue.
+<b class="nc"><i>345</i>&nbsp;      return (last.position - first.position) // all but last entry</b>
+<i>346</i>&nbsp;          + Element.HEADER_LENGTH
+<i>347</i>&nbsp;          + last.length // last entry
+<i>348</i>&nbsp;          + HEADER_LENGTH;
+<i>349</i>&nbsp;    } else {
+<i>350</i>&nbsp;      // tail &lt; head. The queue wraps.
+<b class="nc"><i>351</i>&nbsp;      return last.position // buffer front + header</b>
+<i>352</i>&nbsp;          + Element.HEADER_LENGTH
+<i>353</i>&nbsp;          + last.length // last entry
+<i>354</i>&nbsp;          + fileLength
+<i>355</i>&nbsp;          - first.position; // buffer end
+<i>356</i>&nbsp;    }
+<i>357</i>&nbsp;  }
+<i>358</i>&nbsp;
+<i>359</i>&nbsp;  private int remainingBytes() {
+<b class="nc"><i>360</i>&nbsp;    return fileLength - usedBytes();</b>
+<i>361</i>&nbsp;  }
+<i>362</i>&nbsp;
+<i>363</i>&nbsp;  /** Returns true if this queue contains no entries. */
+<i>364</i>&nbsp;  public synchronized boolean isEmpty() {
+<b class="nc"><i>365</i>&nbsp;    return elementCount == 0;</b>
+<i>366</i>&nbsp;  }
+<i>367</i>&nbsp;
+<i>368</i>&nbsp;  /**
+<i>369</i>&nbsp;   * If necessary, expands the file to accommodate an additional element of the given length.
+<i>370</i>&nbsp;   *
+<i>371</i>&nbsp;   * @param dataLength length of data being added
+<i>372</i>&nbsp;   */
+<i>373</i>&nbsp;  private void expandIfNecessary(int dataLength) throws IOException {
+<b class="nc"><i>374</i>&nbsp;    int elementLength = Element.HEADER_LENGTH + dataLength;</b>
+<b class="nc"><i>375</i>&nbsp;    int remainingBytes = remainingBytes();</b>
+<b class="nc"><i>376</i>&nbsp;    if (remainingBytes &gt;= elementLength) return;</b>
+<i>377</i>&nbsp;
+<i>378</i>&nbsp;    // Expand.
+<b class="nc"><i>379</i>&nbsp;    int previousLength = fileLength;</b>
+<i>380</i>&nbsp;    int newLength;
+<i>381</i>&nbsp;    // Double the length until we can fit the new data.
+<i>382</i>&nbsp;    do {
+<b class="nc"><i>383</i>&nbsp;      remainingBytes += previousLength;</b>
+<b class="nc"><i>384</i>&nbsp;      newLength = previousLength &lt;&lt; 1;</b>
+<b class="nc"><i>385</i>&nbsp;      if (newLength &lt; previousLength) {</b>
+<b class="nc"><i>386</i>&nbsp;        throw new EOFException(&quot;Cannot grow file beyond &quot; + previousLength + &quot; bytes&quot;);</b>
+<i>387</i>&nbsp;      }
+<b class="nc"><i>388</i>&nbsp;      previousLength = newLength;</b>
+<b class="nc"><i>389</i>&nbsp;    } while (remainingBytes &lt; elementLength);</b>
+<i>390</i>&nbsp;
+<b class="nc"><i>391</i>&nbsp;    setLength(newLength);</b>
+<i>392</i>&nbsp;
+<i>393</i>&nbsp;    // Calculate the position of the tail end of the data in the ring buffer
+<b class="nc"><i>394</i>&nbsp;    int endOfLastElement = wrapPosition(last.position + Element.HEADER_LENGTH + last.length);</b>
+<i>395</i>&nbsp;
+<i>396</i>&nbsp;    // If the buffer is split, we need to make it contiguous
+<b class="nc"><i>397</i>&nbsp;    if (endOfLastElement &lt;= first.position) {</b>
+<b class="nc"><i>398</i>&nbsp;      FileChannel channel = raf.getChannel();</b>
+<b class="nc"><i>399</i>&nbsp;      channel.position(fileLength); // destination position</b>
+<b class="nc"><i>400</i>&nbsp;      int count = endOfLastElement - HEADER_LENGTH;</b>
+<b class="nc"><i>401</i>&nbsp;      if (channel.transferTo(HEADER_LENGTH, count, channel) != count) {</b>
+<b class="nc"><i>402</i>&nbsp;        throw new AssertionError(&quot;Copied insufficient number of bytes!&quot;);</b>
+<i>403</i>&nbsp;      }
+<b class="nc"><i>404</i>&nbsp;      ringErase(HEADER_LENGTH, count);</b>
+<i>405</i>&nbsp;    }
+<i>406</i>&nbsp;
+<i>407</i>&nbsp;    // Commit the expansion.
+<b class="nc"><i>408</i>&nbsp;    if (last.position &lt; first.position) {</b>
+<b class="nc"><i>409</i>&nbsp;      int newLastPosition = fileLength + last.position - HEADER_LENGTH;</b>
+<b class="nc"><i>410</i>&nbsp;      writeHeader(newLength, elementCount, first.position, newLastPosition);</b>
+<b class="nc"><i>411</i>&nbsp;      last = new Element(newLastPosition, last.length);</b>
+<b class="nc"><i>412</i>&nbsp;    } else {</b>
+<b class="nc"><i>413</i>&nbsp;      writeHeader(newLength, elementCount, first.position, last.position);</b>
+<i>414</i>&nbsp;    }
+<i>415</i>&nbsp;
+<b class="nc"><i>416</i>&nbsp;    fileLength = newLength;</b>
+<i>417</i>&nbsp;  }
+<i>418</i>&nbsp;
+<i>419</i>&nbsp;  /** Sets the length of the file. */
+<i>420</i>&nbsp;  private void setLength(int newLength) throws IOException {
+<i>421</i>&nbsp;    // Set new file length (considered metadata) and sync it to storage.
+<b class="nc"><i>422</i>&nbsp;    raf.setLength(newLength);</b>
+<b class="nc"><i>423</i>&nbsp;    raf.getChannel().force(true);</b>
+<i>424</i>&nbsp;  }
+<i>425</i>&nbsp;
+<i>426</i>&nbsp;  /** Reads the eldest element. Returns null if the queue is empty. */
+<i>427</i>&nbsp;  public synchronized byte[] peek() throws IOException {
+<b class="nc"><i>428</i>&nbsp;    if (isEmpty()) return null;</b>
+<b class="nc"><i>429</i>&nbsp;    int length = first.length;</b>
+<b class="nc"><i>430</i>&nbsp;    byte[] data = new byte[length];</b>
+<b class="nc"><i>431</i>&nbsp;    ringRead(first.position + Element.HEADER_LENGTH, data, 0, length);</b>
+<b class="nc"><i>432</i>&nbsp;    return data;</b>
+<i>433</i>&nbsp;  }
+<i>434</i>&nbsp;
+<i>435</i>&nbsp;  /**
+<i>436</i>&nbsp;   * Invokes the given reader once for each element in the queue, from eldest to most recently
+<i>437</i>&nbsp;   * added. Continues until all elements are read or {@link PayloadQueue.ElementVisitor#read
+<i>438</i>&nbsp;   * reader.read()} returns {@code false}.
+<i>439</i>&nbsp;   *
+<i>440</i>&nbsp;   * @return number of elements visited
+<i>441</i>&nbsp;   */
+<i>442</i>&nbsp;  public synchronized int forEach(PayloadQueue.ElementVisitor reader) throws IOException {
+<b class="nc"><i>443</i>&nbsp;    int position = first.position;</b>
+<b class="nc"><i>444</i>&nbsp;    for (int i = 0; i &lt; elementCount; i++) {</b>
+<b class="nc"><i>445</i>&nbsp;      Element current = readElement(position);</b>
+<b class="nc"><i>446</i>&nbsp;      boolean shouldContinue = reader.read(new ElementInputStream(current), current.length);</b>
+<b class="nc"><i>447</i>&nbsp;      if (!shouldContinue) {</b>
+<b class="nc"><i>448</i>&nbsp;        return i + 1;</b>
+<i>449</i>&nbsp;      }
+<b class="nc"><i>450</i>&nbsp;      position = wrapPosition(current.position + Element.HEADER_LENGTH + current.length);</b>
+<i>451</i>&nbsp;    }
+<b class="nc"><i>452</i>&nbsp;    return elementCount;</b>
+<i>453</i>&nbsp;  }
+<i>454</i>&nbsp;
+<i>455</i>&nbsp;  @Private
+<i>456</i>&nbsp;  final class ElementInputStream extends InputStream {
+<i>457</i>&nbsp;    private int position;
+<i>458</i>&nbsp;    private int remaining;
+<i>459</i>&nbsp;
+<i>460</i>&nbsp;    @Private
+<b class="nc"><i>461</i>&nbsp;    ElementInputStream(Element element) {</b>
+<b class="nc"><i>462</i>&nbsp;      position = wrapPosition(element.position + Element.HEADER_LENGTH);</b>
+<b class="nc"><i>463</i>&nbsp;      remaining = element.length;</b>
+<i>464</i>&nbsp;    }
+<i>465</i>&nbsp;
+<i>466</i>&nbsp;    @Override
+<i>467</i>&nbsp;    public int read(byte[] buffer, int offset, int length) throws IOException {
+<b class="nc"><i>468</i>&nbsp;      if ((offset | length) &lt; 0 || length &gt; buffer.length - offset) {</b>
+<b class="nc"><i>469</i>&nbsp;        throw new ArrayIndexOutOfBoundsException();</b>
+<i>470</i>&nbsp;      }
+<b class="nc"><i>471</i>&nbsp;      if (remaining == 0) {</b>
+<b class="nc"><i>472</i>&nbsp;        return -1;</b>
+<i>473</i>&nbsp;      }
+<b class="nc"><i>474</i>&nbsp;      if (length &gt; remaining) length = remaining;</b>
+<b class="nc"><i>475</i>&nbsp;      ringRead(position, buffer, offset, length);</b>
+<b class="nc"><i>476</i>&nbsp;      position = wrapPosition(position + length);</b>
+<b class="nc"><i>477</i>&nbsp;      remaining -= length;</b>
+<b class="nc"><i>478</i>&nbsp;      return length;</b>
+<i>479</i>&nbsp;    }
+<i>480</i>&nbsp;
+<i>481</i>&nbsp;    @Override
+<i>482</i>&nbsp;    public int read() throws IOException {
+<b class="nc"><i>483</i>&nbsp;      if (remaining == 0) return -1;</b>
+<b class="nc"><i>484</i>&nbsp;      raf.seek(position);</b>
+<b class="nc"><i>485</i>&nbsp;      int b = raf.read();</b>
+<b class="nc"><i>486</i>&nbsp;      position = wrapPosition(position + 1);</b>
+<b class="nc"><i>487</i>&nbsp;      remaining--;</b>
+<b class="nc"><i>488</i>&nbsp;      return b;</b>
+<i>489</i>&nbsp;    }
+<i>490</i>&nbsp;  }
+<i>491</i>&nbsp;
+<i>492</i>&nbsp;  /** Returns the number of elements in this queue. */
+<i>493</i>&nbsp;  public synchronized int size() {
+<b class="nc"><i>494</i>&nbsp;    return elementCount;</b>
+<i>495</i>&nbsp;  }
+<i>496</i>&nbsp;
+<i>497</i>&nbsp;  /**
+<i>498</i>&nbsp;   * Removes the eldest element.
+<i>499</i>&nbsp;   *
+<i>500</i>&nbsp;   * @throws NoSuchElementException if the queue is empty
+<i>501</i>&nbsp;   */
+<i>502</i>&nbsp;  public synchronized void remove() throws IOException {
+<b class="nc"><i>503</i>&nbsp;    remove(1);</b>
+<i>504</i>&nbsp;  }
+<i>505</i>&nbsp;
+<i>506</i>&nbsp;  /**
+<i>507</i>&nbsp;   * Removes the eldest {@code n} elements.
+<i>508</i>&nbsp;   *
+<i>509</i>&nbsp;   * @throws NoSuchElementException if the queue is empty
+<i>510</i>&nbsp;   */
+<i>511</i>&nbsp;  public synchronized void remove(int n) throws IOException {
+<b class="nc"><i>512</i>&nbsp;    if (isEmpty()) {</b>
+<b class="nc"><i>513</i>&nbsp;      throw new NoSuchElementException();</b>
+<i>514</i>&nbsp;    }
+<b class="nc"><i>515</i>&nbsp;    if (n &lt; 0) {</b>
+<b class="nc"><i>516</i>&nbsp;      throw new IllegalArgumentException(&quot;Cannot remove negative (&quot; + n + &quot;) number of elements.&quot;);</b>
+<i>517</i>&nbsp;    }
+<b class="nc"><i>518</i>&nbsp;    if (n == 0) {</b>
+<i>519</i>&nbsp;      return;
+<i>520</i>&nbsp;    }
+<b class="nc"><i>521</i>&nbsp;    if (n == elementCount) {</b>
+<b class="nc"><i>522</i>&nbsp;      clear();</b>
+<i>523</i>&nbsp;      return;
+<i>524</i>&nbsp;    }
+<b class="nc"><i>525</i>&nbsp;    if (n &gt; elementCount) {</b>
+<b class="nc"><i>526</i>&nbsp;      throw new IllegalArgumentException(</b>
+<i>527</i>&nbsp;          &quot;Cannot remove more elements (&quot; + n + &quot;) than present in queue (&quot; + elementCount + &quot;).&quot;);
+<i>528</i>&nbsp;    }
+<i>529</i>&nbsp;
+<b class="nc"><i>530</i>&nbsp;    final int eraseStartPosition = first.position;</b>
+<b class="nc"><i>531</i>&nbsp;    int eraseTotalLength = 0;</b>
+<i>532</i>&nbsp;
+<i>533</i>&nbsp;    // Read the position and length of the new first element.
+<b class="nc"><i>534</i>&nbsp;    int newFirstPosition = first.position;</b>
+<b class="nc"><i>535</i>&nbsp;    int newFirstLength = first.length;</b>
+<b class="nc"><i>536</i>&nbsp;    for (int i = 0; i &lt; n; i++) {</b>
+<b class="nc"><i>537</i>&nbsp;      eraseTotalLength += Element.HEADER_LENGTH + newFirstLength;</b>
+<b class="nc"><i>538</i>&nbsp;      newFirstPosition = wrapPosition(newFirstPosition + Element.HEADER_LENGTH + newFirstLength);</b>
+<b class="nc"><i>539</i>&nbsp;      ringRead(newFirstPosition, buffer, 0, Element.HEADER_LENGTH);</b>
+<b class="nc"><i>540</i>&nbsp;      newFirstLength = readInt(buffer, 0);</b>
+<i>541</i>&nbsp;    }
+<i>542</i>&nbsp;
+<i>543</i>&nbsp;    // Commit the header.
+<b class="nc"><i>544</i>&nbsp;    writeHeader(fileLength, elementCount - n, newFirstPosition, last.position);</b>
+<b class="nc"><i>545</i>&nbsp;    elementCount -= n;</b>
+<b class="nc"><i>546</i>&nbsp;    first = new Element(newFirstPosition, newFirstLength);</b>
+<i>547</i>&nbsp;
+<i>548</i>&nbsp;    // Commit the erase.
+<b class="nc"><i>549</i>&nbsp;    ringErase(eraseStartPosition, eraseTotalLength);</b>
+<i>550</i>&nbsp;  }
+<i>551</i>&nbsp;
+<i>552</i>&nbsp;  /** Clears this queue. Truncates the file to the initial size. */
+<i>553</i>&nbsp;  public synchronized void clear() throws IOException {
+<i>554</i>&nbsp;    // Commit the header.
+<b class="nc"><i>555</i>&nbsp;    writeHeader(INITIAL_LENGTH, 0, 0, 0);</b>
+<i>556</i>&nbsp;
+<i>557</i>&nbsp;    // Zero out data.
+<b class="nc"><i>558</i>&nbsp;    raf.seek(HEADER_LENGTH);</b>
+<b class="nc"><i>559</i>&nbsp;    raf.write(ZEROES, 0, INITIAL_LENGTH - HEADER_LENGTH);</b>
+<i>560</i>&nbsp;
+<b class="nc"><i>561</i>&nbsp;    elementCount = 0;</b>
+<b class="nc"><i>562</i>&nbsp;    first = Element.NULL;</b>
+<b class="nc"><i>563</i>&nbsp;    last = Element.NULL;</b>
+<b class="nc"><i>564</i>&nbsp;    if (fileLength &gt; INITIAL_LENGTH) setLength(INITIAL_LENGTH);</b>
+<b class="nc"><i>565</i>&nbsp;    fileLength = INITIAL_LENGTH;</b>
+<i>566</i>&nbsp;  }
+<i>567</i>&nbsp;
+<i>568</i>&nbsp;  /** Closes the underlying file. */
+<i>569</i>&nbsp;  @Override
+<i>570</i>&nbsp;  public synchronized void close() throws IOException {
+<b class="nc"><i>571</i>&nbsp;    raf.close();</b>
+<i>572</i>&nbsp;  }
+<i>573</i>&nbsp;
+<i>574</i>&nbsp;  @Override
+<i>575</i>&nbsp;  public String toString() {
+<b class="nc"><i>576</i>&nbsp;    final StringBuilder builder = new StringBuilder();</b>
+<b class="nc"><i>577</i>&nbsp;    builder.append(getClass().getSimpleName()).append(&#39;[&#39;);</b>
+<b class="nc"><i>578</i>&nbsp;    builder.append(&quot;fileLength=&quot;).append(fileLength);</b>
+<b class="nc"><i>579</i>&nbsp;    builder.append(&quot;, size=&quot;).append(elementCount);</b>
+<b class="nc"><i>580</i>&nbsp;    builder.append(&quot;, first=&quot;).append(first);</b>
+<b class="nc"><i>581</i>&nbsp;    builder.append(&quot;, last=&quot;).append(last);</b>
+<b class="nc"><i>582</i>&nbsp;    builder.append(&quot;, element lengths=[&quot;);</b>
+<i>583</i>&nbsp;    try {
+<b class="nc"><i>584</i>&nbsp;      forEach(</b>
+<b class="nc"><i>585</i>&nbsp;          new PayloadQueue.ElementVisitor() {</b>
+<b class="nc"><i>586</i>&nbsp;            boolean first = true;</b>
+<i>587</i>&nbsp;
+<i>588</i>&nbsp;            @Override
+<i>589</i>&nbsp;            public boolean read(InputStream in, int length) throws IOException {
+<b class="nc"><i>590</i>&nbsp;              if (first) {</b>
+<b class="nc"><i>591</i>&nbsp;                first = false;</b>
+<i>592</i>&nbsp;              } else {
+<b class="nc"><i>593</i>&nbsp;                builder.append(&quot;, &quot;);</b>
+<i>594</i>&nbsp;              }
+<b class="nc"><i>595</i>&nbsp;              builder.append(length);</b>
+<b class="nc"><i>596</i>&nbsp;              return true;</b>
+<i>597</i>&nbsp;            }
+<i>598</i>&nbsp;          });
+<b class="nc"><i>599</i>&nbsp;    } catch (IOException e) {</b>
+<b class="nc"><i>600</i>&nbsp;      LOGGER.log(Level.WARNING, &quot;read error&quot;, e);</b>
+<b class="nc"><i>601</i>&nbsp;    }</b>
+<b class="nc"><i>602</i>&nbsp;    builder.append(&quot;]]&quot;);</b>
+<b class="nc"><i>603</i>&nbsp;    return builder.toString();</b>
+<i>604</i>&nbsp;  }
+<i>605</i>&nbsp;
+<i>606</i>&nbsp;  /** A pointer to an element. */
+<i>607</i>&nbsp;  static class Element {
+<b class="nc"><i>608</i>&nbsp;    static final Element NULL = new Element(0, 0);</b>
+<i>609</i>&nbsp;
+<i>610</i>&nbsp;    /** Length of element header in bytes. */
+<i>611</i>&nbsp;    static final int HEADER_LENGTH = 4;
+<i>612</i>&nbsp;
+<i>613</i>&nbsp;    /** Position in file. */
+<i>614</i>&nbsp;    final int position;
+<i>615</i>&nbsp;
+<i>616</i>&nbsp;    /** The length of the data. */
+<i>617</i>&nbsp;    final int length;
+<i>618</i>&nbsp;
+<i>619</i>&nbsp;    /**
+<i>620</i>&nbsp;     * Constructs a new element.
+<i>621</i>&nbsp;     *
+<i>622</i>&nbsp;     * @param position within file
+<i>623</i>&nbsp;     * @param length of data
+<i>624</i>&nbsp;     */
+<b class="nc"><i>625</i>&nbsp;    Element(int position, int length) {</b>
+<b class="nc"><i>626</i>&nbsp;      this.position = position;</b>
+<b class="nc"><i>627</i>&nbsp;      this.length = length;</b>
+<i>628</i>&nbsp;    }
+<i>629</i>&nbsp;
+<i>630</i>&nbsp;    @Override
+<i>631</i>&nbsp;    public String toString() {
+<b class="nc"><i>632</i>&nbsp;      return getClass().getSimpleName()</b>
+<i>633</i>&nbsp;          + &quot;[&quot;
+<i>634</i>&nbsp;          + &quot;position = &quot;
+<i>635</i>&nbsp;          + position
+<i>636</i>&nbsp;          + &quot;, length = &quot;
+<i>637</i>&nbsp;          + length
+<i>638</i>&nbsp;          + &quot;]&quot;;
+<i>639</i>&nbsp;    }
+<i>640</i>&nbsp;  }
+<i>641</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-24 19:51</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,194 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Integration</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.segment.analytics.integrations</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Integration (com.segment.analytics.integrations)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Integration</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/**
+<i>2</i>&nbsp; * The MIT License (MIT)
+<i>3</i>&nbsp; *
+<i>4</i>&nbsp; * Copyright (c) 2014 Segment.io, Inc.
+<i>5</i>&nbsp; *
+<i>6</i>&nbsp; * Permission is hereby granted, free of charge, to any person obtaining a copy
+<i>7</i>&nbsp; * of this software and associated documentation files (the &quot;Software&quot;), to deal
+<i>8</i>&nbsp; * in the Software without restriction, including without limitation the rights
+<i>9</i>&nbsp; * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<i>10</i>&nbsp; * copies of the Software, and to permit persons to whom the Software is
+<i>11</i>&nbsp; * furnished to do so, subject to the following conditions:
+<i>12</i>&nbsp; *
+<i>13</i>&nbsp; * The above copyright notice and this permission notice shall be included in all
+<i>14</i>&nbsp; * copies or substantial portions of the Software.
+<i>15</i>&nbsp; *
+<i>16</i>&nbsp; * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<i>17</i>&nbsp; * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<i>18</i>&nbsp; * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<i>19</i>&nbsp; * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<i>20</i>&nbsp; * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<i>21</i>&nbsp; * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<i>22</i>&nbsp; * SOFTWARE.
+<i>23</i>&nbsp; */
+<i>24</i>&nbsp;package com.segment.analytics.integrations;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;import android.app.Activity;
+<i>27</i>&nbsp;import android.os.Bundle;
+<i>28</i>&nbsp;import androidx.annotation.NonNull;
+<i>29</i>&nbsp;import com.segment.analytics.Analytics;
+<i>30</i>&nbsp;import com.segment.analytics.ValueMap;
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;/**
+<i>33</i>&nbsp; * Converts Segment messages to a format a bundled integration understands, and calls those methods.
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * @param &lt;T&gt; The type of the backing instance. This isn&#39;t strictly necessary (since we return an
+<i>36</i>&nbsp; *     object), but serves as documentation for what type to expect with {@link
+<i>37</i>&nbsp; *     #getUnderlyingInstance()}.
+<i>38</i>&nbsp; */
+<b class="nc"><i>39</i>&nbsp;public abstract class Integration&lt;T&gt; {</b>
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;  public interface Factory {
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    /**
+<i>44</i>&nbsp;     * Attempts to create an adapter for with {@code settings}. This returns the adapter if one was
+<i>45</i>&nbsp;     * created, or null if this factory isn&#39;t capable of creating such an adapter.
+<i>46</i>&nbsp;     */
+<i>47</i>&nbsp;    Integration&lt;?&gt; create(ValueMap settings, Analytics analytics);
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    /** The key for which this factory can create an {@link Integration}. */
+<i>50</i>&nbsp;    @NonNull
+<i>51</i>&nbsp;    String key();
+<i>52</i>&nbsp;  }
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;  /** @see android.app.Application.ActivityLifecycleCallbacks */
+<i>55</i>&nbsp;  public void onActivityCreated(Activity activity, Bundle savedInstanceState) {}
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;  /** @see android.app.Application.ActivityLifecycleCallbacks */
+<i>58</i>&nbsp;  public void onActivityStarted(Activity activity) {}
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;  /** @see android.app.Application.ActivityLifecycleCallbacks */
+<i>61</i>&nbsp;  public void onActivityResumed(Activity activity) {}
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;  /** @see android.app.Application.ActivityLifecycleCallbacks */
+<i>64</i>&nbsp;  public void onActivityPaused(Activity activity) {}
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;  /** @see android.app.Application.ActivityLifecycleCallbacks */
+<i>67</i>&nbsp;  public void onActivityStopped(Activity activity) {}
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;  /** @see android.app.Application.ActivityLifecycleCallbacks */
+<i>70</i>&nbsp;  public void onActivitySaveInstanceState(Activity activity, Bundle outState) {}
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;  /** @see android.app.Application.ActivityLifecycleCallbacks */
+<i>73</i>&nbsp;  public void onActivityDestroyed(Activity activity) {}
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;  /**
+<i>76</i>&nbsp;   * @see Analytics#identify(String, com.segment.analytics.Traits, com.segment.analytics.Options)
+<i>77</i>&nbsp;   */
+<i>78</i>&nbsp;  public void identify(IdentifyPayload identify) {}
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;  /** @see Analytics#group(String, com.segment.analytics.Traits, com.segment.analytics.Options) */
+<i>81</i>&nbsp;  public void group(GroupPayload group) {}
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;  /**
+<i>84</i>&nbsp;   * @see Analytics#track(String, com.segment.analytics.Properties, com.segment.analytics.Options)
+<i>85</i>&nbsp;   */
+<i>86</i>&nbsp;  public void track(TrackPayload track) {}
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;  /** @see Analytics#alias(String, com.segment.analytics.Options) */
+<i>89</i>&nbsp;  public void alias(AliasPayload alias) {}
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;  /**
+<i>92</i>&nbsp;   * @see Analytics#screen(String, String, com.segment.analytics.Properties,
+<i>93</i>&nbsp;   *     com.segment.analytics.Options)
+<i>94</i>&nbsp;   */
+<i>95</i>&nbsp;  public void screen(ScreenPayload screen) {}
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;  /** @see Analytics#flush() */
+<i>98</i>&nbsp;  public void flush() {}
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;  /** @see Analytics#reset() */
+<i>101</i>&nbsp;  public void reset() {}
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;  /**
+<i>104</i>&nbsp;   * The underlying instance for this provider - used for integration specific actions. This will
+<i>105</i>&nbsp;   * return {@code null} for SDK&#39;s that only provide interactions with static methods (e.g.
+<i>106</i>&nbsp;   * Localytics).
+<i>107</i>&nbsp;   */
+<i>108</i>&nbsp;  public T getUnderlyingInstance() {
+<b class="nc"><i>109</i>&nbsp;    return null;</b>
+<i>110</i>&nbsp;  }
+<i>111</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-24 19:51</div>
+</div>
+</body>
+</html>

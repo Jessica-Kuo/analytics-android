@@ -359,9 +359,9 @@ public class ValueMapTest {
 
   static class Settings extends ValueMap {
 
-    Settings(Map<String, Object> map) throws IOException {
-      super(map);
-    }
+      Settings(Map<String, Object> map) throws IOException {
+        super(map);
+      }
 
     AmplitudeSettings getAmplitudeSettings() {
       return getValueMap("Amplitude", AmplitudeSettings.class);

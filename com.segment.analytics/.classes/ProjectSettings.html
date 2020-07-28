@@ -1,0 +1,198 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ProjectSettings</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.segment.analytics</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ProjectSettings (com.segment.analytics)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ProjectSettings</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 10)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ProjectSettings$Cache</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 12)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/**
+<i>2</i>&nbsp; * The MIT License (MIT)
+<i>3</i>&nbsp; *
+<i>4</i>&nbsp; * Copyright (c) 2014 Segment.io, Inc.
+<i>5</i>&nbsp; *
+<i>6</i>&nbsp; * Permission is hereby granted, free of charge, to any person obtaining a copy
+<i>7</i>&nbsp; * of this software and associated documentation files (the &quot;Software&quot;), to deal
+<i>8</i>&nbsp; * in the Software without restriction, including without limitation the rights
+<i>9</i>&nbsp; * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<i>10</i>&nbsp; * copies of the Software, and to permit persons to whom the Software is
+<i>11</i>&nbsp; * furnished to do so, subject to the following conditions:
+<i>12</i>&nbsp; *
+<i>13</i>&nbsp; * The above copyright notice and this permission notice shall be included in all
+<i>14</i>&nbsp; * copies or substantial portions of the Software.
+<i>15</i>&nbsp; *
+<i>16</i>&nbsp; * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<i>17</i>&nbsp; * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<i>18</i>&nbsp; * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<i>19</i>&nbsp; * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<i>20</i>&nbsp; * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<i>21</i>&nbsp; * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<i>22</i>&nbsp; * SOFTWARE.
+<i>23</i>&nbsp; */
+<i>24</i>&nbsp;package com.segment.analytics;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;import static java.util.Collections.unmodifiableMap;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;import android.content.Context;
+<i>29</i>&nbsp;import com.segment.analytics.internal.Private;
+<i>30</i>&nbsp;import java.util.Map;
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;class ProjectSettings extends ValueMap {
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;  private static final String TIMESTAMP_KEY = &quot;timestamp&quot;;
+<i>35</i>&nbsp;  private static final String PLAN_KEY = &quot;plan&quot;;
+<i>36</i>&nbsp;  private static final String INTEGRATIONS_KEY = &quot;integrations&quot;;
+<i>37</i>&nbsp;  private static final String TRACKING_PLAN_KEY = &quot;track&quot;;
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;  static ProjectSettings create(Map&lt;String, Object&gt; map) {
+<b class="nc"><i>40</i>&nbsp;    map.put(TIMESTAMP_KEY, System.currentTimeMillis());</b>
+<b class="nc"><i>41</i>&nbsp;    return new ProjectSettings(map);</b>
+<i>42</i>&nbsp;  }
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;  @Private
+<i>45</i>&nbsp;  ProjectSettings(Map&lt;String, Object&gt; map) {
+<b class="nc"><i>46</i>&nbsp;    super(unmodifiableMap(map));</b>
+<i>47</i>&nbsp;  }
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;  long timestamp() {
+<b class="nc"><i>50</i>&nbsp;    return getLong(TIMESTAMP_KEY, 0L);</b>
+<i>51</i>&nbsp;  }
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;  ValueMap plan() {
+<b class="nc"><i>54</i>&nbsp;    return getValueMap(PLAN_KEY);</b>
+<i>55</i>&nbsp;  }
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;  ValueMap trackingPlan() {
+<b class="nc"><i>58</i>&nbsp;    ValueMap plan = plan();</b>
+<b class="nc"><i>59</i>&nbsp;    if (plan == null) {</b>
+<b class="nc"><i>60</i>&nbsp;      return null;</b>
+<i>61</i>&nbsp;    }
+<b class="nc"><i>62</i>&nbsp;    return plan.getValueMap(TRACKING_PLAN_KEY);</b>
+<i>63</i>&nbsp;  }
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;  ValueMap integrations() {
+<b class="nc"><i>66</i>&nbsp;    return getValueMap(INTEGRATIONS_KEY);</b>
+<i>67</i>&nbsp;  }
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;  static class Cache extends ValueMap.Cache&lt;ProjectSettings&gt; {
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;    // todo: remove. This is legacy behaviour from before we started namespacing the entire shared
+<i>72</i>&nbsp;    // preferences object and were namespacing keys instead.
+<i>73</i>&nbsp;    private static final String PROJECT_SETTINGS_CACHE_KEY_PREFIX = &quot;project-settings-plan-&quot;;
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;    Cache(Context context, Cartographer cartographer, String tag) {
+<b class="nc"><i>76</i>&nbsp;      super(</b>
+<i>77</i>&nbsp;          context,
+<i>78</i>&nbsp;          cartographer,
+<i>79</i>&nbsp;          PROJECT_SETTINGS_CACHE_KEY_PREFIX + tag,
+<i>80</i>&nbsp;          tag,
+<i>81</i>&nbsp;          ProjectSettings.class);
+<i>82</i>&nbsp;    }
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;    @Override
+<i>85</i>&nbsp;    public ProjectSettings create(Map&lt;String, Object&gt; map) {
+<b class="nc"><i>86</i>&nbsp;      return new ProjectSettings(map);</b>
+<i>87</i>&nbsp;    }
+<i>88</i>&nbsp;  }
+<i>89</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-24 19:51</div>
+</div>
+</body>
+</html>

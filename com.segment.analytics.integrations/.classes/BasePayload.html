@@ -1,0 +1,530 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BasePayload</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.segment.analytics.integrations</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BasePayload (com.segment.analytics.integrations)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BasePayload</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 24)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">BasePayload$Builder</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 58)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">BasePayload$Channel</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">BasePayload$Type</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 6)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 92)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/**
+<i>2</i>&nbsp; * The MIT License (MIT)
+<i>3</i>&nbsp; *
+<i>4</i>&nbsp; * Copyright (c) 2014 Segment.io, Inc.
+<i>5</i>&nbsp; *
+<i>6</i>&nbsp; * Permission is hereby granted, free of charge, to any person obtaining a copy
+<i>7</i>&nbsp; * of this software and associated documentation files (the &quot;Software&quot;), to deal
+<i>8</i>&nbsp; * in the Software without restriction, including without limitation the rights
+<i>9</i>&nbsp; * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<i>10</i>&nbsp; * copies of the Software, and to permit persons to whom the Software is
+<i>11</i>&nbsp; * furnished to do so, subject to the following conditions:
+<i>12</i>&nbsp; *
+<i>13</i>&nbsp; * The above copyright notice and this permission notice shall be included in all
+<i>14</i>&nbsp; * copies or substantial portions of the Software.
+<i>15</i>&nbsp; *
+<i>16</i>&nbsp; * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<i>17</i>&nbsp; * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<i>18</i>&nbsp; * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<i>19</i>&nbsp; * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<i>20</i>&nbsp; * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<i>21</i>&nbsp; * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<i>22</i>&nbsp; * SOFTWARE.
+<i>23</i>&nbsp; */
+<i>24</i>&nbsp;package com.segment.analytics.integrations;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;import static com.segment.analytics.internal.Utils.assertNotNull;
+<i>27</i>&nbsp;import static com.segment.analytics.internal.Utils.assertNotNullOrEmpty;
+<i>28</i>&nbsp;import static com.segment.analytics.internal.Utils.immutableCopyOf;
+<i>29</i>&nbsp;import static com.segment.analytics.internal.Utils.isNullOrEmpty;
+<i>30</i>&nbsp;import static com.segment.analytics.internal.Utils.parseISO8601DateWithNanos;
+<i>31</i>&nbsp;import static com.segment.analytics.internal.Utils.toISO8601NanoFormattedString;
+<i>32</i>&nbsp;import static com.segment.analytics.internal.Utils.toISO8601String;
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;import androidx.annotation.CheckResult;
+<i>35</i>&nbsp;import androidx.annotation.NonNull;
+<i>36</i>&nbsp;import androidx.annotation.Nullable;
+<i>37</i>&nbsp;import com.segment.analytics.AnalyticsContext;
+<i>38</i>&nbsp;import com.segment.analytics.ValueMap;
+<i>39</i>&nbsp;import com.segment.analytics.internal.NanoDate;
+<i>40</i>&nbsp;import java.util.Collections;
+<i>41</i>&nbsp;import java.util.Date;
+<i>42</i>&nbsp;import java.util.LinkedHashMap;
+<i>43</i>&nbsp;import java.util.Map;
+<i>44</i>&nbsp;import java.util.UUID;
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;/**
+<i>47</i>&nbsp; * A payload object that will be sent to the server. Clients will not decode instances of this
+<i>48</i>&nbsp; * directly, but through one if it&#39;s subclasses.
+<i>49</i>&nbsp; */
+<i>50</i>&nbsp;// This ignores projectId, receivedAt and version that are set by the server.
+<i>51</i>&nbsp;// sentAt is set on SegmentClient#BatchPayload
+<i>52</i>&nbsp;public abstract class BasePayload extends ValueMap {
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;  static final String TYPE_KEY = &quot;type&quot;;
+<i>55</i>&nbsp;  static final String ANONYMOUS_ID_KEY = &quot;anonymousId&quot;;
+<i>56</i>&nbsp;  static final String CHANNEL_KEY = &quot;channel&quot;;
+<i>57</i>&nbsp;  static final String MESSAGE_ID = &quot;messageId&quot;;
+<i>58</i>&nbsp;  static final String CONTEXT_KEY = &quot;context&quot;;
+<i>59</i>&nbsp;  static final String INTEGRATIONS_KEY = &quot;integrations&quot;;
+<i>60</i>&nbsp;  static final String TIMESTAMP_KEY = &quot;timestamp&quot;;
+<i>61</i>&nbsp;  static final String USER_ID_KEY = &quot;userId&quot;;
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;  BasePayload(
+<i>64</i>&nbsp;      @NonNull Type type,
+<i>65</i>&nbsp;      @NonNull String messageId,
+<i>66</i>&nbsp;      @NonNull Date timestamp,
+<i>67</i>&nbsp;      @NonNull Map&lt;String, Object&gt; context,
+<i>68</i>&nbsp;      @NonNull Map&lt;String, Object&gt; integrations,
+<i>69</i>&nbsp;      @Nullable String userId,
+<i>70</i>&nbsp;      @NonNull String anonymousId,
+<b class="nc"><i>71</i>&nbsp;      boolean nanosecondTimestamps) {</b>
+<b class="nc"><i>72</i>&nbsp;    put(CHANNEL_KEY, Channel.mobile);</b>
+<b class="nc"><i>73</i>&nbsp;    put(TYPE_KEY, type);</b>
+<b class="nc"><i>74</i>&nbsp;    put(MESSAGE_ID, messageId);</b>
+<b class="nc"><i>75</i>&nbsp;    if (nanosecondTimestamps) {</b>
+<b class="nc"><i>76</i>&nbsp;      put(TIMESTAMP_KEY, toISO8601NanoFormattedString(timestamp));</b>
+<i>77</i>&nbsp;    } else {
+<b class="nc"><i>78</i>&nbsp;      put(TIMESTAMP_KEY, toISO8601String(timestamp));</b>
+<i>79</i>&nbsp;    }
+<b class="nc"><i>80</i>&nbsp;    put(CONTEXT_KEY, context);</b>
+<b class="nc"><i>81</i>&nbsp;    put(INTEGRATIONS_KEY, integrations);</b>
+<b class="nc"><i>82</i>&nbsp;    if (!isNullOrEmpty(userId)) {</b>
+<b class="nc"><i>83</i>&nbsp;      put(USER_ID_KEY, userId);</b>
+<i>84</i>&nbsp;    }
+<b class="nc"><i>85</i>&nbsp;    put(ANONYMOUS_ID_KEY, anonymousId);</b>
+<i>86</i>&nbsp;  }
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;  /** The type of message. */
+<i>89</i>&nbsp;  @NonNull
+<i>90</i>&nbsp;  public Type type() {
+<b class="nc"><i>91</i>&nbsp;    return getEnum(Type.class, TYPE_KEY);</b>
+<i>92</i>&nbsp;  }
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;  /**
+<i>95</i>&nbsp;   * The user ID is an identifier that unique identifies the user in your database. Ideally it
+<i>96</i>&nbsp;   * should not be an email address, because emails can change, whereas a database ID can&#39;t.
+<i>97</i>&nbsp;   */
+<i>98</i>&nbsp;  @Nullable
+<i>99</i>&nbsp;  public String userId() {
+<b class="nc"><i>100</i>&nbsp;    return getString(USER_ID_KEY);</b>
+<i>101</i>&nbsp;  }
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;  /**
+<i>104</i>&nbsp;   * The anonymous ID is an identifier that uniquely (or close enough) identifies the user, but
+<i>105</i>&nbsp;   * isn&#39;t from your database. This is useful in cases where you are able to uniquely identifier the
+<i>106</i>&nbsp;   * user between visits before they sign up thanks to a cookie, or session ID or device ID. In our
+<i>107</i>&nbsp;   * mobile and browser libraries we will automatically handle sending the anonymous ID.
+<i>108</i>&nbsp;   */
+<i>109</i>&nbsp;  @NonNull
+<i>110</i>&nbsp;  public String anonymousId() {
+<b class="nc"><i>111</i>&nbsp;    return getString(ANONYMOUS_ID_KEY);</b>
+<i>112</i>&nbsp;  }
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;  /** A randomly generated unique id for this message. */
+<i>115</i>&nbsp;  @NonNull
+<i>116</i>&nbsp;  public String messageId() {
+<b class="nc"><i>117</i>&nbsp;    return getString(MESSAGE_ID);</b>
+<i>118</i>&nbsp;  }
+<i>119</i>&nbsp;
+<i>120</i>&nbsp;  /**
+<i>121</i>&nbsp;   * Set a timestamp the event occurred.
+<i>122</i>&nbsp;   *
+<i>123</i>&nbsp;   * &lt;p&gt;This library will automatically create and attach a timestamp to all events.
+<i>124</i>&nbsp;   *
+<i>125</i>&nbsp;   * @see &lt;a href=&quot;https://segment.com/docs/spec/common/#timestamps&quot;&gt;Timestamp&lt;/a&gt;
+<i>126</i>&nbsp;   */
+<i>127</i>&nbsp;  @Nullable
+<i>128</i>&nbsp;  public Date timestamp() {
+<i>129</i>&nbsp;    // It&#39;s unclear if this will ever be null. So we&#39;re being safe.
+<b class="nc"><i>130</i>&nbsp;    String timestamp = getString(TIMESTAMP_KEY);</b>
+<b class="nc"><i>131</i>&nbsp;    if (isNullOrEmpty(timestamp)) {</b>
+<b class="nc"><i>132</i>&nbsp;      return null;</b>
+<i>133</i>&nbsp;    }
+<b class="nc"><i>134</i>&nbsp;    return parseISO8601DateWithNanos(timestamp);</b>
+<i>135</i>&nbsp;  }
+<i>136</i>&nbsp;
+<i>137</i>&nbsp;  /**
+<i>138</i>&nbsp;   * A dictionary of integration names that the message should be proxied to. &#39;All&#39; is a special
+<i>139</i>&nbsp;   * name that applies when no key for a specific integration is found, and is case-insensitive.
+<i>140</i>&nbsp;   */
+<i>141</i>&nbsp;  public ValueMap integrations() {
+<b class="nc"><i>142</i>&nbsp;    return getValueMap(INTEGRATIONS_KEY);</b>
+<i>143</i>&nbsp;  }
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;  /**
+<i>146</i>&nbsp;   * The context is a dictionary of extra information that provides useful context about a message,
+<i>147</i>&nbsp;   * for example ip address or locale.
+<i>148</i>&nbsp;   *
+<i>149</i>&nbsp;   * @see &lt;a href=&quot;https://segment.com/docs/spec/common/#context&quot;&gt;Context fields&lt;/a&gt;
+<i>150</i>&nbsp;   */
+<i>151</i>&nbsp;  public AnalyticsContext context() {
+<b class="nc"><i>152</i>&nbsp;    return getValueMap(CONTEXT_KEY, AnalyticsContext.class);</b>
+<i>153</i>&nbsp;  }
+<i>154</i>&nbsp;
+<i>155</i>&nbsp;  @Override
+<i>156</i>&nbsp;  public BasePayload putValue(String key, Object value) {
+<b class="nc"><i>157</i>&nbsp;    super.putValue(key, value);</b>
+<b class="nc"><i>158</i>&nbsp;    return this;</b>
+<i>159</i>&nbsp;  }
+<i>160</i>&nbsp;
+<i>161</i>&nbsp;  @NonNull
+<i>162</i>&nbsp;  public abstract Builder toBuilder();
+<i>163</i>&nbsp;
+<i>164</i>&nbsp;  /** @see #TYPE_KEY */
+<b class="nc"><i>165</i>&nbsp;  public enum Type {</b>
+<b class="nc"><i>166</i>&nbsp;    alias,</b>
+<b class="nc"><i>167</i>&nbsp;    group,</b>
+<b class="nc"><i>168</i>&nbsp;    identify,</b>
+<b class="nc"><i>169</i>&nbsp;    screen,</b>
+<b class="nc"><i>170</i>&nbsp;    track</b>
+<i>171</i>&nbsp;  }
+<i>172</i>&nbsp;
+<i>173</i>&nbsp;  /**
+<i>174</i>&nbsp;   * The channel where the request originated from: server, browser or mobile. In the future we may
+<i>175</i>&nbsp;   * add additional channels as we add libraries, for example console.
+<i>176</i>&nbsp;   *
+<i>177</i>&nbsp;   * &lt;p&gt;This is always {@link Channel#mobile} for us.
+<i>178</i>&nbsp;   */
+<b class="nc"><i>179</i>&nbsp;  public enum Channel {</b>
+<b class="nc"><i>180</i>&nbsp;    browser,</b>
+<b class="nc"><i>181</i>&nbsp;    mobile,</b>
+<b class="nc"><i>182</i>&nbsp;    server</b>
+<i>183</i>&nbsp;  }
+<i>184</i>&nbsp;
+<i>185</i>&nbsp;  public abstract static class Builder&lt;P extends BasePayload, B extends Builder&gt; {
+<i>186</i>&nbsp;
+<i>187</i>&nbsp;    private String messageId;
+<i>188</i>&nbsp;    private Date timestamp;
+<i>189</i>&nbsp;    private Map&lt;String, Object&gt; context;
+<i>190</i>&nbsp;    private Map&lt;String, Object&gt; integrationsBuilder;
+<i>191</i>&nbsp;    private String userId;
+<i>192</i>&nbsp;    private String anonymousId;
+<b class="nc"><i>193</i>&nbsp;    private boolean nanosecondTimestamps = false;</b>
+<i>194</i>&nbsp;
+<b class="nc"><i>195</i>&nbsp;    Builder() {</b>
+<i>196</i>&nbsp;      // Empty constructor.
+<i>197</i>&nbsp;    }
+<i>198</i>&nbsp;
+<b class="nc"><i>199</i>&nbsp;    Builder(BasePayload payload) {</b>
+<b class="nc"><i>200</i>&nbsp;      String tsStr = payload.getString(TIMESTAMP_KEY);</b>
+<b class="nc"><i>201</i>&nbsp;      if (tsStr != null &amp;&amp; tsStr.length() &gt; 24) { // [yyyy-MM-ddThh:mm:ss.sssZ] format without nanos</b>
+<b class="nc"><i>202</i>&nbsp;        nanosecondTimestamps = true;</b>
+<i>203</i>&nbsp;      }
+<b class="nc"><i>204</i>&nbsp;      messageId = payload.messageId();</b>
+<b class="nc"><i>205</i>&nbsp;      timestamp = payload.timestamp();</b>
+<b class="nc"><i>206</i>&nbsp;      context = payload.context();</b>
+<b class="nc"><i>207</i>&nbsp;      integrationsBuilder = new LinkedHashMap&lt;&gt;(payload.integrations());</b>
+<b class="nc"><i>208</i>&nbsp;      userId = payload.userId();</b>
+<b class="nc"><i>209</i>&nbsp;      anonymousId = payload.anonymousId();</b>
+<i>210</i>&nbsp;    }
+<i>211</i>&nbsp;
+<i>212</i>&nbsp;    /**
+<i>213</i>&nbsp;     * The Message ID is a unique identifier for each message. If not provided, one will be
+<i>214</i>&nbsp;     * generated for you. This ID is typically used for deduping - messages with the same IDs as
+<i>215</i>&nbsp;     * previous events may be dropped.
+<i>216</i>&nbsp;     *
+<i>217</i>&nbsp;     * @see &lt;a href=&quot;https://segment.com/docs/spec/common/&quot;&gt;Common Fields&lt;/a&gt;
+<i>218</i>&nbsp;     */
+<i>219</i>&nbsp;    @NonNull
+<i>220</i>&nbsp;    public B messageId(@NonNull String messageId) {
+<b class="nc"><i>221</i>&nbsp;      assertNotNullOrEmpty(messageId, &quot;messageId&quot;);</b>
+<b class="nc"><i>222</i>&nbsp;      this.messageId = messageId;</b>
+<b class="nc"><i>223</i>&nbsp;      return self();</b>
+<i>224</i>&nbsp;    }
+<i>225</i>&nbsp;
+<i>226</i>&nbsp;    /**
+<i>227</i>&nbsp;     * Set a timestamp for the event. By default, the current timestamp is used, but you may
+<i>228</i>&nbsp;     * override it for historical import.
+<i>229</i>&nbsp;     *
+<i>230</i>&nbsp;     * &lt;p&gt;This library will automatically create and attach a timestamp to all events.
+<i>231</i>&nbsp;     *
+<i>232</i>&nbsp;     * @see &lt;a href=&quot;https://segment.com/docs/spec/common/#timestamps&quot;&gt;Timestamp&lt;/a&gt;
+<i>233</i>&nbsp;     */
+<i>234</i>&nbsp;    @NonNull
+<i>235</i>&nbsp;    public B timestamp(@NonNull Date timestamp) {
+<b class="nc"><i>236</i>&nbsp;      assertNotNull(timestamp, &quot;timestamp&quot;);</b>
+<b class="nc"><i>237</i>&nbsp;      this.timestamp = timestamp;</b>
+<b class="nc"><i>238</i>&nbsp;      return self();</b>
+<i>239</i>&nbsp;    }
+<i>240</i>&nbsp;
+<i>241</i>&nbsp;    /**
+<i>242</i>&nbsp;     * Set a map of information about the state of the device. You can add any custom data to the
+<i>243</i>&nbsp;     * context dictionary that you&#39;d like to have access to in the raw logs.
+<i>244</i>&nbsp;     *
+<i>245</i>&nbsp;     * &lt;p&gt;Some keys in the context dictionary have semantic meaning and will be collected for you
+<i>246</i>&nbsp;     * automatically, depending on the library you send data from. Some keys, such as location and
+<i>247</i>&nbsp;     * speed need to be manually entered.
+<i>248</i>&nbsp;     *
+<i>249</i>&nbsp;     * @see &lt;a href=&quot;https://segment.com/docs/spec/common/#context&quot;&gt;Context&lt;/a&gt;
+<i>250</i>&nbsp;     */
+<i>251</i>&nbsp;    @NonNull
+<i>252</i>&nbsp;    public B context(@NonNull Map&lt;String, ?&gt; context) {
+<b class="nc"><i>253</i>&nbsp;      assertNotNull(context, &quot;context&quot;);</b>
+<b class="nc"><i>254</i>&nbsp;      this.context = Collections.unmodifiableMap(new LinkedHashMap&lt;&gt;(context));</b>
+<b class="nc"><i>255</i>&nbsp;      return self();</b>
+<i>256</i>&nbsp;    }
+<i>257</i>&nbsp;
+<i>258</i>&nbsp;    /**
+<i>259</i>&nbsp;     * Set whether this message is sent to the specified integration or not. &#39;All&#39; is a special key
+<i>260</i>&nbsp;     * that applies when no key for a specific integration is found.
+<i>261</i>&nbsp;     *
+<i>262</i>&nbsp;     * @see &lt;a href=&quot;https://segment.com/docs/spec/common/#integrations&quot;&gt;Integrations&lt;/a&gt;
+<i>263</i>&nbsp;     */
+<i>264</i>&nbsp;    @NonNull
+<i>265</i>&nbsp;    public B integration(@NonNull String key, boolean enable) {
+<b class="nc"><i>266</i>&nbsp;      assertNotNullOrEmpty(key, &quot;key&quot;);</b>
+<b class="nc"><i>267</i>&nbsp;      if (integrationsBuilder == null) {</b>
+<b class="nc"><i>268</i>&nbsp;        integrationsBuilder = new LinkedHashMap&lt;&gt;();</b>
+<i>269</i>&nbsp;      }
+<b class="nc"><i>270</i>&nbsp;      integrationsBuilder.put(key, enable);</b>
+<b class="nc"><i>271</i>&nbsp;      return self();</b>
+<i>272</i>&nbsp;    }
+<i>273</i>&nbsp;
+<i>274</i>&nbsp;    /**
+<i>275</i>&nbsp;     * Pass in some options that will only be used by the target integration. This will implicitly
+<i>276</i>&nbsp;     * mark the integration as enabled.
+<i>277</i>&nbsp;     *
+<i>278</i>&nbsp;     * @see &lt;a href=&quot;https://segment.com/docs/spec/common/#integrations&quot;&gt;Integrations&lt;/a&gt;
+<i>279</i>&nbsp;     */
+<i>280</i>&nbsp;    @NonNull
+<i>281</i>&nbsp;    public B integration(@NonNull String key, @NonNull Map&lt;String, Object&gt; options) {
+<b class="nc"><i>282</i>&nbsp;      assertNotNullOrEmpty(key, &quot;key&quot;);</b>
+<b class="nc"><i>283</i>&nbsp;      assertNotNullOrEmpty(options, &quot;options&quot;);</b>
+<b class="nc"><i>284</i>&nbsp;      if (integrationsBuilder == null) {</b>
+<b class="nc"><i>285</i>&nbsp;        integrationsBuilder = new LinkedHashMap&lt;&gt;();</b>
+<i>286</i>&nbsp;      }
+<b class="nc"><i>287</i>&nbsp;      integrationsBuilder.put(key, immutableCopyOf(options));</b>
+<b class="nc"><i>288</i>&nbsp;      return self();</b>
+<i>289</i>&nbsp;    }
+<i>290</i>&nbsp;
+<i>291</i>&nbsp;    /**
+<i>292</i>&nbsp;     * Specify a dictionary of options for integrations.
+<i>293</i>&nbsp;     *
+<i>294</i>&nbsp;     * @see &lt;a href=&quot;https://segment.com/docs/spec/common/#integrations&quot;&gt;Integrations&lt;/a&gt;
+<i>295</i>&nbsp;     */
+<i>296</i>&nbsp;    @NonNull
+<i>297</i>&nbsp;    public B integrations(@Nullable Map&lt;String, ?&gt; integrations) {
+<b class="nc"><i>298</i>&nbsp;      if (isNullOrEmpty(integrations)) {</b>
+<b class="nc"><i>299</i>&nbsp;        return self();</b>
+<i>300</i>&nbsp;      }
+<b class="nc"><i>301</i>&nbsp;      if (integrationsBuilder == null) {</b>
+<b class="nc"><i>302</i>&nbsp;        integrationsBuilder = new LinkedHashMap&lt;&gt;();</b>
+<i>303</i>&nbsp;      }
+<b class="nc"><i>304</i>&nbsp;      integrationsBuilder.putAll(integrations);</b>
+<b class="nc"><i>305</i>&nbsp;      return self();</b>
+<i>306</i>&nbsp;    }
+<i>307</i>&nbsp;
+<i>308</i>&nbsp;    /**
+<i>309</i>&nbsp;     * The Anonymous ID is a pseudo-unique substitute for a User ID, for cases when you don&#39;t have
+<i>310</i>&nbsp;     * an absolutely unique identifier.
+<i>311</i>&nbsp;     *
+<i>312</i>&nbsp;     * @see &lt;a href=&quot;https://segment.com/docs/spec/identify/#identities&quot;&gt;Identities&lt;/a&gt;
+<i>313</i>&nbsp;     * @see &lt;a href=&quot;https://segment.com/docs/spec/identify/#anonymous-id&quot;&gt;Anonymous ID&lt;/a&gt;
+<i>314</i>&nbsp;     */
+<i>315</i>&nbsp;    @NonNull
+<i>316</i>&nbsp;    public B anonymousId(@NonNull String anonymousId) {
+<b class="nc"><i>317</i>&nbsp;      this.anonymousId = assertNotNullOrEmpty(anonymousId, &quot;anonymousId&quot;);</b>
+<b class="nc"><i>318</i>&nbsp;      return self();</b>
+<i>319</i>&nbsp;    }
+<i>320</i>&nbsp;
+<i>321</i>&nbsp;    /**
+<i>322</i>&nbsp;     * The User ID is a persistent unique identifier for a user (such as a database ID).
+<i>323</i>&nbsp;     *
+<i>324</i>&nbsp;     * @see &lt;a href=&quot;https://segment.com/docs/spec/identify/#identities&quot;&gt;Identities&lt;/a&gt;
+<i>325</i>&nbsp;     * @see &lt;a href=&quot;https://segment.com/docs/spec/identify/#user-id&quot;&gt;User ID&lt;/a&gt;
+<i>326</i>&nbsp;     */
+<i>327</i>&nbsp;    @NonNull
+<i>328</i>&nbsp;    public B userId(@NonNull String userId) {
+<b class="nc"><i>329</i>&nbsp;      this.userId = assertNotNullOrEmpty(userId, &quot;userId&quot;);</b>
+<b class="nc"><i>330</i>&nbsp;      return self();</b>
+<i>331</i>&nbsp;    }
+<i>332</i>&nbsp;
+<i>333</i>&nbsp;    /** Returns true if userId is not-null or non-empty, false otherwise */
+<i>334</i>&nbsp;    public boolean isUserIdSet() {
+<b class="nc"><i>335</i>&nbsp;      return !isNullOrEmpty(userId);</b>
+<i>336</i>&nbsp;    }
+<i>337</i>&nbsp;
+<i>338</i>&nbsp;    public B nanosecondTimestamps(boolean enabled) {
+<b class="nc"><i>339</i>&nbsp;      this.nanosecondTimestamps = enabled;</b>
+<b class="nc"><i>340</i>&nbsp;      return self();</b>
+<i>341</i>&nbsp;    }
+<i>342</i>&nbsp;
+<i>343</i>&nbsp;    abstract P realBuild(
+<i>344</i>&nbsp;        @NonNull String messageId,
+<i>345</i>&nbsp;        @NonNull Date timestamp,
+<i>346</i>&nbsp;        @NonNull Map&lt;String, Object&gt; context,
+<i>347</i>&nbsp;        @NonNull Map&lt;String, Object&gt; integrations,
+<i>348</i>&nbsp;        @Nullable String userId,
+<i>349</i>&nbsp;        @NonNull String anonymousId,
+<i>350</i>&nbsp;        boolean nanosecondTimestamps);
+<i>351</i>&nbsp;
+<i>352</i>&nbsp;    abstract B self();
+<i>353</i>&nbsp;
+<i>354</i>&nbsp;    /** Create a {@link BasePayload} instance. */
+<i>355</i>&nbsp;    @CheckResult
+<i>356</i>&nbsp;    @NonNull
+<i>357</i>&nbsp;    public P build() {
+<b class="nc"><i>358</i>&nbsp;      if (isNullOrEmpty(userId) &amp;&amp; isNullOrEmpty(anonymousId)) {</b>
+<b class="nc"><i>359</i>&nbsp;        throw new NullPointerException(&quot;either userId or anonymousId is required&quot;);</b>
+<i>360</i>&nbsp;      }
+<i>361</i>&nbsp;
+<b class="nc"><i>362</i>&nbsp;      Map&lt;String, Object&gt; integrations =</b>
+<b class="nc"><i>363</i>&nbsp;          isNullOrEmpty(integrationsBuilder)</b>
+<b class="nc"><i>364</i>&nbsp;              ? Collections.&lt;String, Object&gt;emptyMap()</b>
+<b class="nc"><i>365</i>&nbsp;              : immutableCopyOf(integrationsBuilder);</b>
+<i>366</i>&nbsp;
+<b class="nc"><i>367</i>&nbsp;      if (isNullOrEmpty(messageId)) {</b>
+<b class="nc"><i>368</i>&nbsp;        messageId = UUID.randomUUID().toString();</b>
+<i>369</i>&nbsp;      }
+<i>370</i>&nbsp;
+<b class="nc"><i>371</i>&nbsp;      if (timestamp == null) {</b>
+<b class="nc"><i>372</i>&nbsp;        timestamp = new NanoDate(); // captures higher resolution timestamps</b>
+<i>373</i>&nbsp;      }
+<i>374</i>&nbsp;
+<b class="nc"><i>375</i>&nbsp;      if (isNullOrEmpty(context)) {</b>
+<b class="nc"><i>376</i>&nbsp;        context = Collections.emptyMap();</b>
+<i>377</i>&nbsp;      }
+<i>378</i>&nbsp;
+<b class="nc"><i>379</i>&nbsp;      return realBuild(</b>
+<i>380</i>&nbsp;          messageId, timestamp, context, integrations, userId, anonymousId, nanosecondTimestamps);
+<i>381</i>&nbsp;    }
+<i>382</i>&nbsp;  }
+<i>383</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-24 19:51</div>
+</div>
+</body>
+</html>

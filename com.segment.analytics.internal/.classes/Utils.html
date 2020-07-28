@@ -1,0 +1,770 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Utils</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.segment.analytics.internal</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Utils (com.segment.analytics.internal)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Utils</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 40)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 151)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Utils$AnalyticsNetworkExecutorService</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">Utils$AnalyticsThread</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">Utils$AnalyticsThreadFactory</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">Utils$NullableConcurrentHashMap</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 8)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 50)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 166)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/**
+<i>2</i>&nbsp; * The MIT License (MIT)
+<i>3</i>&nbsp; *
+<i>4</i>&nbsp; * Copyright (c) 2014 Segment.io, Inc.
+<i>5</i>&nbsp; *
+<i>6</i>&nbsp; * Permission is hereby granted, free of charge, to any person obtaining a copy
+<i>7</i>&nbsp; * of this software and associated documentation files (the &quot;Software&quot;), to deal
+<i>8</i>&nbsp; * in the Software without restriction, including without limitation the rights
+<i>9</i>&nbsp; * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<i>10</i>&nbsp; * copies of the Software, and to permit persons to whom the Software is
+<i>11</i>&nbsp; * furnished to do so, subject to the following conditions:
+<i>12</i>&nbsp; *
+<i>13</i>&nbsp; * The above copyright notice and this permission notice shall be included in all
+<i>14</i>&nbsp; * copies or substantial portions of the Software.
+<i>15</i>&nbsp; *
+<i>16</i>&nbsp; * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<i>17</i>&nbsp; * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<i>18</i>&nbsp; * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<i>19</i>&nbsp; * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<i>20</i>&nbsp; * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<i>21</i>&nbsp; * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<i>22</i>&nbsp; * SOFTWARE.
+<i>23</i>&nbsp; */
+<i>24</i>&nbsp;package com.segment.analytics.internal;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;import static android.Manifest.permission.ACCESS_NETWORK_STATE;
+<i>27</i>&nbsp;import static android.Manifest.permission.READ_PHONE_STATE;
+<i>28</i>&nbsp;import static android.content.Context.CONNECTIVITY_SERVICE;
+<i>29</i>&nbsp;import static android.content.Context.MODE_PRIVATE;
+<i>30</i>&nbsp;import static android.content.Context.TELEPHONY_SERVICE;
+<i>31</i>&nbsp;import static android.content.pm.PackageManager.FEATURE_TELEPHONY;
+<i>32</i>&nbsp;import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+<i>33</i>&nbsp;import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
+<i>34</i>&nbsp;import static android.provider.Settings.Secure.ANDROID_ID;
+<i>35</i>&nbsp;import static android.provider.Settings.Secure.getString;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;import android.annotation.SuppressLint;
+<i>38</i>&nbsp;import android.content.Context;
+<i>39</i>&nbsp;import android.content.SharedPreferences;
+<i>40</i>&nbsp;import android.net.ConnectivityManager;
+<i>41</i>&nbsp;import android.net.NetworkInfo;
+<i>42</i>&nbsp;import android.os.Build;
+<i>43</i>&nbsp;import android.os.Process;
+<i>44</i>&nbsp;import android.telephony.TelephonyManager;
+<i>45</i>&nbsp;import android.text.TextUtils;
+<i>46</i>&nbsp;import androidx.annotation.NonNull;
+<i>47</i>&nbsp;import androidx.annotation.Nullable;
+<i>48</i>&nbsp;import java.io.BufferedReader;
+<i>49</i>&nbsp;import java.io.Closeable;
+<i>50</i>&nbsp;import java.io.File;
+<i>51</i>&nbsp;import java.io.IOException;
+<i>52</i>&nbsp;import java.io.InputStream;
+<i>53</i>&nbsp;import java.io.InputStreamReader;
+<i>54</i>&nbsp;import java.lang.reflect.Array;
+<i>55</i>&nbsp;import java.net.HttpURLConnection;
+<i>56</i>&nbsp;import java.text.ParseException;
+<i>57</i>&nbsp;import java.util.ArrayList;
+<i>58</i>&nbsp;import java.util.Collection;
+<i>59</i>&nbsp;import java.util.Collections;
+<i>60</i>&nbsp;import java.util.Date;
+<i>61</i>&nbsp;import java.util.HashSet;
+<i>62</i>&nbsp;import java.util.LinkedHashMap;
+<i>63</i>&nbsp;import java.util.List;
+<i>64</i>&nbsp;import java.util.Map;
+<i>65</i>&nbsp;import java.util.Set;
+<i>66</i>&nbsp;import java.util.UUID;
+<i>67</i>&nbsp;import java.util.concurrent.ConcurrentHashMap;
+<i>68</i>&nbsp;import java.util.concurrent.LinkedBlockingQueue;
+<i>69</i>&nbsp;import java.util.concurrent.ThreadFactory;
+<i>70</i>&nbsp;import java.util.concurrent.ThreadPoolExecutor;
+<i>71</i>&nbsp;import java.util.concurrent.TimeUnit;
+<i>72</i>&nbsp;import java.util.concurrent.atomic.AtomicInteger;
+<i>73</i>&nbsp;import org.json.JSONArray;
+<i>74</i>&nbsp;import org.json.JSONException;
+<i>75</i>&nbsp;import org.json.JSONObject;
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;public final class Utils {
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;  public static final String THREAD_PREFIX = &quot;Segment-&quot;;
+<i>80</i>&nbsp;  public static final int DEFAULT_FLUSH_INTERVAL = 30 * 1000; // 30s
+<i>81</i>&nbsp;  public static final int DEFAULT_FLUSH_QUEUE_SIZE = 20;
+<i>82</i>&nbsp;  public static final boolean DEFAULT_COLLECT_DEVICE_ID = true;
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;  /** Creates a mutable HashSet instance containing the given elements in unspecified order */
+<i>85</i>&nbsp;  public static &lt;T&gt; Set&lt;T&gt; newSet(T... values) {
+<b class="nc"><i>86</i>&nbsp;    Set&lt;T&gt; set = new HashSet&lt;&gt;(values.length);</b>
+<b class="nc"><i>87</i>&nbsp;    Collections.addAll(set, values);</b>
+<b class="nc"><i>88</i>&nbsp;    return set;</b>
+<i>89</i>&nbsp;  }
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;  /** @deprecated Use {@link #toISO8601String(Date)}. */
+<i>92</i>&nbsp;  public static String toISO8601Date(Date date) {
+<b class="nc"><i>93</i>&nbsp;    return toISO8601String(date);</b>
+<i>94</i>&nbsp;  }
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;  /** Returns {@code date} formatted as yyyy-MM-ddThh:mm:ss.sssZ */
+<i>97</i>&nbsp;  public static String toISO8601String(Date date) {
+<b class="nc"><i>98</i>&nbsp;    return Iso8601Utils.format(date);</b>
+<i>99</i>&nbsp;  }
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;  /** Returns {@code date} formatted as yyyy-MM-ddThh:mm:ss.fffffffffZ */
+<i>102</i>&nbsp;  public static String toISO8601NanoFormattedString(Date date) {
+<b class="nc"><i>103</i>&nbsp;    return Iso8601Utils.formatNanos(date);</b>
+<i>104</i>&nbsp;  }
+<i>105</i>&nbsp;
+<i>106</i>&nbsp;  /**
+<i>107</i>&nbsp;   * Parse a date from ISO-8601 formatted string. It expects a format
+<i>108</i>&nbsp;   * [yyyy-MM-dd|yyyyMMdd][T(hh:mm[:ss[.sss]]|hhmm[ss[.sss]])]?[Z|[+-]hh:mm]]
+<i>109</i>&nbsp;   *
+<i>110</i>&nbsp;   * @param date ISO string to parse in the appropriate format.
+<i>111</i>&nbsp;   * @return the parsed date
+<i>112</i>&nbsp;   */
+<i>113</i>&nbsp;  public static Date parseISO8601Date(String date) {
+<b class="nc"><i>114</i>&nbsp;    return Iso8601Utils.parse(date);</b>
+<i>115</i>&nbsp;  }
+<i>116</i>&nbsp;
+<i>117</i>&nbsp;  /** @deprecated Use {@link #parseISO8601Date(String)}. */
+<i>118</i>&nbsp;  public static Date toISO8601Date(String date) throws ParseException {
+<b class="nc"><i>119</i>&nbsp;    return parseISO8601Date(date);</b>
+<i>120</i>&nbsp;  }
+<i>121</i>&nbsp;
+<i>122</i>&nbsp;  /**
+<i>123</i>&nbsp;   * Parse a date from ISO-8601 formatted string. It expects a format
+<i>124</i>&nbsp;   * [yyyy-MM-dd|yyyyMMdd][T(hh:mm[:ss[.fffffffff]]|hhmm[ss[.fffffffff]])]?[Z|[+-]hh:mm]]
+<i>125</i>&nbsp;   *
+<i>126</i>&nbsp;   * @param date ISO string to parse in the appropriate format.
+<i>127</i>&nbsp;   * @return the parsed date
+<i>128</i>&nbsp;   */
+<i>129</i>&nbsp;  public static NanoDate parseISO8601DateWithNanos(String date) {
+<b class="nc"><i>130</i>&nbsp;    return Iso8601Utils.parseWithNanos(date);</b>
+<i>131</i>&nbsp;  }
+<i>132</i>&nbsp;
+<i>133</i>&nbsp;  // TODO: Migrate other coercion methods.
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;  /**
+<i>136</i>&nbsp;   * Returns the float representation at {@code value} if it exists and is a float or can be coerced
+<i>137</i>&nbsp;   * to a float. Returns {@code defaultValue} otherwise.
+<i>138</i>&nbsp;   */
+<i>139</i>&nbsp;  public static float coerceToFloat(Object value, float defaultValue) {
+<b class="nc"><i>140</i>&nbsp;    if (value instanceof Float) {</b>
+<b class="nc"><i>141</i>&nbsp;      return (float) value;</b>
+<i>142</i>&nbsp;    }
+<b class="nc"><i>143</i>&nbsp;    if (value instanceof Number) {</b>
+<b class="nc"><i>144</i>&nbsp;      return ((Number) value).floatValue();</b>
+<b class="nc"><i>145</i>&nbsp;    } else if (value instanceof String) {</b>
+<i>146</i>&nbsp;      try {
+<b class="nc"><i>147</i>&nbsp;        return Float.valueOf((String) value);</b>
+<b class="nc"><i>148</i>&nbsp;      } catch (NumberFormatException ignored) {</b>
+<i>149</i>&nbsp;      }
+<i>150</i>&nbsp;    }
+<b class="nc"><i>151</i>&nbsp;    return defaultValue;</b>
+<i>152</i>&nbsp;  }
+<i>153</i>&nbsp;
+<i>154</i>&nbsp;  /** Returns true if the application has the given permission. */
+<i>155</i>&nbsp;  public static boolean hasPermission(Context context, String permission) {
+<b class="nc"><i>156</i>&nbsp;    return context.checkCallingOrSelfPermission(permission) == PERMISSION_GRANTED;</b>
+<i>157</i>&nbsp;  }
+<i>158</i>&nbsp;
+<i>159</i>&nbsp;  /** Returns true if the application has the given feature. */
+<i>160</i>&nbsp;  public static boolean hasFeature(Context context, String feature) {
+<b class="nc"><i>161</i>&nbsp;    return context.getPackageManager().hasSystemFeature(feature);</b>
+<i>162</i>&nbsp;  }
+<i>163</i>&nbsp;
+<i>164</i>&nbsp;  /** Returns the system service for the given string. */
+<i>165</i>&nbsp;  @SuppressWarnings(&quot;unchecked&quot;)
+<i>166</i>&nbsp;  public static &lt;T&gt; T getSystemService(Context context, String serviceConstant) {
+<b class="nc"><i>167</i>&nbsp;    return (T) context.getSystemService(serviceConstant);</b>
+<i>168</i>&nbsp;  }
+<i>169</i>&nbsp;
+<i>170</i>&nbsp;  /** Returns true if the string is null, or empty (once trimmed). */
+<i>171</i>&nbsp;  public static boolean isNullOrEmpty(CharSequence text) {
+<b class="nc"><i>172</i>&nbsp;    return isEmpty(text) || getTrimmedLength(text) == 0;</b>
+<i>173</i>&nbsp;  }
+<i>174</i>&nbsp;
+<i>175</i>&nbsp;  /**
+<i>176</i>&nbsp;   * Returns true if the string is null or 0-length.
+<i>177</i>&nbsp;   *
+<i>178</i>&nbsp;   * &lt;p&gt;Copied from {@link TextUtils#isEmpty(CharSequence)}
+<i>179</i>&nbsp;   *
+<i>180</i>&nbsp;   * @param str the string to be examined
+<i>181</i>&nbsp;   * @return true if str is null or zero length
+<i>182</i>&nbsp;   */
+<i>183</i>&nbsp;  private static boolean isEmpty(@Nullable CharSequence str) {
+<b class="nc"><i>184</i>&nbsp;    return str == null || str.length() == 0;</b>
+<i>185</i>&nbsp;  }
+<i>186</i>&nbsp;
+<i>187</i>&nbsp;  /**
+<i>188</i>&nbsp;   * Returns the length that the specified CharSequence would have if spaces and control characters
+<i>189</i>&nbsp;   * were trimmed from the start and end, as by {@link String#trim}.
+<i>190</i>&nbsp;   *
+<i>191</i>&nbsp;   * &lt;p&gt;Copied from {@link TextUtils#getTrimmedLength(CharSequence)}
+<i>192</i>&nbsp;   */
+<i>193</i>&nbsp;  private static int getTrimmedLength(@NonNull CharSequence s) {
+<b class="nc"><i>194</i>&nbsp;    int len = s.length();</b>
+<i>195</i>&nbsp;
+<b class="nc"><i>196</i>&nbsp;    int start = 0;</b>
+<b class="nc"><i>197</i>&nbsp;    while (start &lt; len &amp;&amp; s.charAt(start) &lt;= &#39; &#39;) {</b>
+<b class="nc"><i>198</i>&nbsp;      start++;</b>
+<i>199</i>&nbsp;    }
+<i>200</i>&nbsp;
+<b class="nc"><i>201</i>&nbsp;    int end = len;</b>
+<b class="nc"><i>202</i>&nbsp;    while (end &gt; start &amp;&amp; s.charAt(end - 1) &lt;= &#39; &#39;) {</b>
+<b class="nc"><i>203</i>&nbsp;      end--;</b>
+<i>204</i>&nbsp;    }
+<i>205</i>&nbsp;
+<b class="nc"><i>206</i>&nbsp;    return end - start;</b>
+<i>207</i>&nbsp;  }
+<i>208</i>&nbsp;
+<i>209</i>&nbsp;  /** Returns true if the collection is null or has a size of 0. */
+<i>210</i>&nbsp;  public static boolean isNullOrEmpty(Collection collection) {
+<b class="nc"><i>211</i>&nbsp;    return collection == null || collection.size() == 0;</b>
+<i>212</i>&nbsp;  }
+<i>213</i>&nbsp;
+<i>214</i>&nbsp;  /** Returns true if the array is null or has a size of 0. */
+<i>215</i>&nbsp;  public static &lt;T&gt; boolean isNullOrEmpty(T[] data) {
+<b class="nc"><i>216</i>&nbsp;    return data == null || data.length == 0;</b>
+<i>217</i>&nbsp;  }
+<i>218</i>&nbsp;
+<i>219</i>&nbsp;  /** Returns true if the map is null or empty, false otherwise. */
+<i>220</i>&nbsp;  public static boolean isNullOrEmpty(Map map) {
+<b class="nc"><i>221</i>&nbsp;    return map == null || map.size() == 0;</b>
+<i>222</i>&nbsp;  }
+<i>223</i>&nbsp;
+<i>224</i>&nbsp;  /** Throws a {@link NullPointerException} if the given text is null or empty. */
+<i>225</i>&nbsp;  @NonNull
+<i>226</i>&nbsp;  public static String assertNotNullOrEmpty(String text, @Nullable String name) {
+<b class="nc"><i>227</i>&nbsp;    if (isNullOrEmpty(text)) {</b>
+<b class="nc"><i>228</i>&nbsp;      throw new NullPointerException(name + &quot; cannot be null or empty&quot;);</b>
+<i>229</i>&nbsp;    }
+<b class="nc"><i>230</i>&nbsp;    return text;</b>
+<i>231</i>&nbsp;  }
+<i>232</i>&nbsp;
+<i>233</i>&nbsp;  /** Throws a {@link NullPointerException} if the given map is null or empty. */
+<i>234</i>&nbsp;  @NonNull
+<i>235</i>&nbsp;  public static &lt;K, V&gt; Map&lt;K, V&gt; assertNotNullOrEmpty(Map&lt;K, V&gt; data, @Nullable String name) {
+<b class="nc"><i>236</i>&nbsp;    if (isNullOrEmpty(data)) {</b>
+<b class="nc"><i>237</i>&nbsp;      throw new NullPointerException(name + &quot; cannot be null or empty&quot;);</b>
+<i>238</i>&nbsp;    }
+<b class="nc"><i>239</i>&nbsp;    return data;</b>
+<i>240</i>&nbsp;  }
+<i>241</i>&nbsp;
+<i>242</i>&nbsp;  /** Throws a {@link NullPointerException} if the given object is null. */
+<i>243</i>&nbsp;  @NonNull
+<i>244</i>&nbsp;  public static &lt;T&gt; T assertNotNull(T object, String item) {
+<b class="nc"><i>245</i>&nbsp;    if (object == null) {</b>
+<b class="nc"><i>246</i>&nbsp;      throw new NullPointerException(item + &quot; == null&quot;);</b>
+<i>247</i>&nbsp;    }
+<b class="nc"><i>248</i>&nbsp;    return object;</b>
+<i>249</i>&nbsp;  }
+<i>250</i>&nbsp;
+<i>251</i>&nbsp;  /** Returns an immutable copy of the provided map. */
+<i>252</i>&nbsp;  @NonNull
+<i>253</i>&nbsp;  public static &lt;K, V&gt; Map&lt;K, V&gt; immutableCopyOf(@NonNull Map&lt;K, V&gt; map) {
+<i>254</i>&nbsp;    // TODO (major version change) change this out to allow @Nullable input and guard against it
+<i>255</i>&nbsp;    //  @NonNull
+<i>256</i>&nbsp;    //  public static &lt;K, V&gt; Map&lt;K, V&gt; immutableCopyOf(@Nullable Map&lt;K, V&gt; map) {
+<i>257</i>&nbsp;    //    if (isNullOrEmpty(map)) {
+<i>258</i>&nbsp;    //      return Collections.emptyMap();
+<i>259</i>&nbsp;    //    }
+<i>260</i>&nbsp;    //    return Collections.unmodifiableMap(new LinkedHashMap&lt;&gt;(map));
+<i>261</i>&nbsp;    //  }
+<b class="nc"><i>262</i>&nbsp;    return Collections.unmodifiableMap(new LinkedHashMap&lt;&gt;(map));</b>
+<i>263</i>&nbsp;  }
+<i>264</i>&nbsp;
+<i>265</i>&nbsp;  /** Returns an immutable copy of the provided list. */
+<i>266</i>&nbsp;  @NonNull
+<i>267</i>&nbsp;  public static &lt;T&gt; List&lt;T&gt; immutableCopyOf(@Nullable List&lt;T&gt; list) {
+<b class="nc"><i>268</i>&nbsp;    if (isNullOrEmpty(list)) {</b>
+<b class="nc"><i>269</i>&nbsp;      return Collections.emptyList();</b>
+<i>270</i>&nbsp;    }
+<b class="nc"><i>271</i>&nbsp;    return Collections.unmodifiableList(new ArrayList&lt;&gt;(list));</b>
+<i>272</i>&nbsp;  }
+<i>273</i>&nbsp;
+<i>274</i>&nbsp;  /**
+<i>275</i>&nbsp;   * Creates a unique device id. Suppresses `HardwareIds` lint warnings as we don&#39;t use this ID for
+<i>276</i>&nbsp;   * identifying specific users. This is also what is required by the Segment spec.
+<i>277</i>&nbsp;   */
+<i>278</i>&nbsp;  @SuppressLint(&quot;HardwareIds&quot;)
+<i>279</i>&nbsp;  public static String getDeviceId(Context context) {
+<b class="nc"><i>280</i>&nbsp;    String androidId = getString(context.getContentResolver(), ANDROID_ID);</b>
+<b class="nc"><i>281</i>&nbsp;    if (!isNullOrEmpty(androidId)</b>
+<b class="nc"><i>282</i>&nbsp;        &amp;&amp; !&quot;9774d56d682e549c&quot;.equals(androidId)</b>
+<b class="nc"><i>283</i>&nbsp;        &amp;&amp; !&quot;unknown&quot;.equals(androidId)</b>
+<b class="nc"><i>284</i>&nbsp;        &amp;&amp; !&quot;000000000000000&quot;.equals(androidId)) {</b>
+<b class="nc"><i>285</i>&nbsp;      return androidId;</b>
+<i>286</i>&nbsp;    }
+<i>287</i>&nbsp;
+<i>288</i>&nbsp;    // Serial number, guaranteed to be on all non phones in 2.3+.
+<b class="nc"><i>289</i>&nbsp;    if (!isNullOrEmpty(Build.SERIAL)) {</b>
+<b class="nc"><i>290</i>&nbsp;      return Build.SERIAL;</b>
+<i>291</i>&nbsp;    }
+<i>292</i>&nbsp;
+<i>293</i>&nbsp;    // Telephony ID, guaranteed to be on all phones, requires READ_PHONE_STATE permission
+<b class="nc"><i>294</i>&nbsp;    if (hasPermission(context, READ_PHONE_STATE) &amp;&amp; hasFeature(context, FEATURE_TELEPHONY)) {</b>
+<b class="nc"><i>295</i>&nbsp;      TelephonyManager telephonyManager = getSystemService(context, TELEPHONY_SERVICE);</b>
+<i>296</i>&nbsp;      @SuppressLint(&quot;MissingPermission&quot;)
+<b class="nc"><i>297</i>&nbsp;      String telephonyId = telephonyManager.getDeviceId();</b>
+<b class="nc"><i>298</i>&nbsp;      if (!isNullOrEmpty(telephonyId)) {</b>
+<b class="nc"><i>299</i>&nbsp;        return telephonyId;</b>
+<i>300</i>&nbsp;      }
+<i>301</i>&nbsp;    }
+<i>302</i>&nbsp;
+<i>303</i>&nbsp;    // If this still fails, generate random identifier that does not persist across installations
+<b class="nc"><i>304</i>&nbsp;    return UUID.randomUUID().toString();</b>
+<i>305</i>&nbsp;  }
+<i>306</i>&nbsp;
+<i>307</i>&nbsp;  /** Returns a shared preferences for storing any library preferences. */
+<i>308</i>&nbsp;  public static SharedPreferences getSegmentSharedPreferences(Context context, String tag) {
+<b class="nc"><i>309</i>&nbsp;    return context.getSharedPreferences(&quot;analytics-android-&quot; + tag, MODE_PRIVATE);</b>
+<i>310</i>&nbsp;  }
+<i>311</i>&nbsp;
+<i>312</i>&nbsp;  /** Get the string resource for the given key. Returns null if not found. */
+<i>313</i>&nbsp;  public static String getResourceString(Context context, String key) {
+<b class="nc"><i>314</i>&nbsp;    int id = getIdentifier(context, &quot;string&quot;, key);</b>
+<b class="nc"><i>315</i>&nbsp;    if (id != 0) {</b>
+<b class="nc"><i>316</i>&nbsp;      return context.getResources().getString(id);</b>
+<i>317</i>&nbsp;    } else {
+<b class="nc"><i>318</i>&nbsp;      return null;</b>
+<i>319</i>&nbsp;    }
+<i>320</i>&nbsp;  }
+<i>321</i>&nbsp;
+<i>322</i>&nbsp;  /** Get the identifier for the resource with a given type and key. */
+<i>323</i>&nbsp;  private static int getIdentifier(Context context, String type, String key) {
+<b class="nc"><i>324</i>&nbsp;    return context.getResources().getIdentifier(key, type, context.getPackageName());</b>
+<i>325</i>&nbsp;  }
+<i>326</i>&nbsp;
+<i>327</i>&nbsp;  /**
+<i>328</i>&nbsp;   * Returns {@code true} if the phone is connected to a network, or if we don&#39;t have the enough
+<i>329</i>&nbsp;   * permissions. Returns {@code false} otherwise.
+<i>330</i>&nbsp;   */
+<i>331</i>&nbsp;  public static boolean isConnected(Context context) {
+<b class="nc"><i>332</i>&nbsp;    if (!hasPermission(context, ACCESS_NETWORK_STATE)) {</b>
+<b class="nc"><i>333</i>&nbsp;      return true; // Assume we have a connection and try to upload.</b>
+<i>334</i>&nbsp;    }
+<b class="nc"><i>335</i>&nbsp;    ConnectivityManager cm = getSystemService(context, CONNECTIVITY_SERVICE);</b>
+<i>336</i>&nbsp;    @SuppressLint(&quot;MissingPermission&quot;)
+<b class="nc"><i>337</i>&nbsp;    NetworkInfo activeNetwork = cm.getActiveNetworkInfo();</b>
+<b class="nc"><i>338</i>&nbsp;    return activeNetwork != null &amp;&amp; activeNetwork.isConnectedOrConnecting();</b>
+<i>339</i>&nbsp;  }
+<i>340</i>&nbsp;
+<i>341</i>&nbsp;  /** Return {@code true} if a class with the given name is found. */
+<i>342</i>&nbsp;  public static boolean isOnClassPath(String className) {
+<i>343</i>&nbsp;    try {
+<b class="nc"><i>344</i>&nbsp;      Class.forName(className);</b>
+<b class="nc"><i>345</i>&nbsp;      return true;</b>
+<b class="nc"><i>346</i>&nbsp;    } catch (ClassNotFoundException e) {</b>
+<i>347</i>&nbsp;      // ignored
+<b class="nc"><i>348</i>&nbsp;      return false;</b>
+<i>349</i>&nbsp;    }
+<i>350</i>&nbsp;  }
+<i>351</i>&nbsp;
+<i>352</i>&nbsp;  /**
+<i>353</i>&nbsp;   * Close the given {@link Closeable}. If an exception is thrown during {@link Closeable#close()},
+<i>354</i>&nbsp;   * this will quietly ignore it. Does nothing if {@code closeable} is {@code null}.
+<i>355</i>&nbsp;   */
+<i>356</i>&nbsp;  public static void closeQuietly(Closeable closeable) {
+<b class="nc"><i>357</i>&nbsp;    if (closeable == null) {</b>
+<i>358</i>&nbsp;      return;
+<i>359</i>&nbsp;    }
+<i>360</i>&nbsp;    try {
+<b class="nc"><i>361</i>&nbsp;      closeable.close();</b>
+<b class="nc"><i>362</i>&nbsp;    } catch (IOException ignored) {</b>
+<b class="nc"><i>363</i>&nbsp;    }</b>
+<i>364</i>&nbsp;  }
+<i>365</i>&nbsp;
+<i>366</i>&nbsp;  /** Buffers the given {@code InputStream}. */
+<i>367</i>&nbsp;  public static BufferedReader buffer(InputStream is) {
+<b class="nc"><i>368</i>&nbsp;    return new BufferedReader(new InputStreamReader(is));</b>
+<i>369</i>&nbsp;  }
+<i>370</i>&nbsp;
+<i>371</i>&nbsp;  /** Reads the give {@code InputStream} into a String. */
+<i>372</i>&nbsp;  public static String readFully(InputStream is) throws IOException {
+<b class="nc"><i>373</i>&nbsp;    return readFully(buffer(is));</b>
+<i>374</i>&nbsp;  }
+<i>375</i>&nbsp;
+<i>376</i>&nbsp;  /** Reads the give {@code BufferedReader} into a String. */
+<i>377</i>&nbsp;  public static String readFully(BufferedReader reader) throws IOException {
+<b class="nc"><i>378</i>&nbsp;    StringBuilder sb = new StringBuilder();</b>
+<b class="nc"><i>379</i>&nbsp;    for (String line; (line = reader.readLine()) != null; ) {</b>
+<b class="nc"><i>380</i>&nbsp;      sb.append(line);</b>
+<i>381</i>&nbsp;    }
+<b class="nc"><i>382</i>&nbsp;    return sb.toString();</b>
+<i>383</i>&nbsp;  }
+<i>384</i>&nbsp;
+<i>385</i>&nbsp;  public static InputStream getInputStream(HttpURLConnection connection) throws IOException {
+<i>386</i>&nbsp;    try {
+<b class="nc"><i>387</i>&nbsp;      return connection.getInputStream();</b>
+<b class="nc"><i>388</i>&nbsp;    } catch (IOException ignored) {</b>
+<b class="nc"><i>389</i>&nbsp;      return connection.getErrorStream();</b>
+<i>390</i>&nbsp;    }
+<i>391</i>&nbsp;  }
+<i>392</i>&nbsp;
+<i>393</i>&nbsp;  /**
+<i>394</i>&nbsp;   * Transforms the given map by replacing the keys mapped by {@code mapper}. Any keys not in the
+<i>395</i>&nbsp;   * mapper preserve their original keys. If a key in the mapper maps to null or a blank string,
+<i>396</i>&nbsp;   * that value is dropped.
+<i>397</i>&nbsp;   *
+<i>398</i>&nbsp;   * &lt;p&gt;e.g. transform({a: 1, b: 2, c: 3}, {a: a, c: &quot;&quot;}) -&gt; {$a: 1, b: 2} - transforms a to $a -
+<i>399</i>&nbsp;   * keeps b - removes c
+<i>400</i>&nbsp;   */
+<i>401</i>&nbsp;  public static &lt;T&gt; Map&lt;String, T&gt; transform(Map&lt;String, T&gt; in, Map&lt;String, String&gt; mapper) {
+<b class="nc"><i>402</i>&nbsp;    Map&lt;String, T&gt; out = new LinkedHashMap&lt;&gt;(in.size());</b>
+<b class="nc"><i>403</i>&nbsp;    for (Map.Entry&lt;String, T&gt; entry : in.entrySet()) {</b>
+<b class="nc"><i>404</i>&nbsp;      String key = entry.getKey();</b>
+<b class="nc"><i>405</i>&nbsp;      if (!mapper.containsKey(key)) {</b>
+<b class="nc"><i>406</i>&nbsp;        out.put(key, entry.getValue()); // keep the original key.</b>
+<b class="nc"><i>407</i>&nbsp;        continue;</b>
+<i>408</i>&nbsp;      }
+<b class="nc"><i>409</i>&nbsp;      String mappedKey = mapper.get(key);</b>
+<b class="nc"><i>410</i>&nbsp;      if (!isNullOrEmpty(mappedKey)) {</b>
+<b class="nc"><i>411</i>&nbsp;        out.put(mappedKey, entry.getValue());</b>
+<i>412</i>&nbsp;      }
+<b class="nc"><i>413</i>&nbsp;    }</b>
+<b class="nc"><i>414</i>&nbsp;    return out;</b>
+<i>415</i>&nbsp;  }
+<i>416</i>&nbsp;
+<i>417</i>&nbsp;  /**
+<i>418</i>&nbsp;   * Return a copy of the contents of the given map as a {@link JSONObject}. Instead of failing on
+<i>419</i>&nbsp;   * {@code null} values like the {@link JSONObject} map constructor, it cleans them up and
+<i>420</i>&nbsp;   * correctly converts them to {@link JSONObject#NULL}.
+<i>421</i>&nbsp;   */
+<i>422</i>&nbsp;  public static JSONObject toJsonObject(Map&lt;String, ?&gt; map) {
+<b class="nc"><i>423</i>&nbsp;    JSONObject jsonObject = new JSONObject();</b>
+<b class="nc"><i>424</i>&nbsp;    for (Map.Entry&lt;String, ?&gt; entry : map.entrySet()) {</b>
+<b class="nc"><i>425</i>&nbsp;      Object value = wrap(entry.getValue());</b>
+<i>426</i>&nbsp;      try {
+<b class="nc"><i>427</i>&nbsp;        jsonObject.put(entry.getKey(), value);</b>
+<b class="nc"><i>428</i>&nbsp;      } catch (JSONException ignored) {</b>
+<i>429</i>&nbsp;        // Ignore values that JSONObject doesn&#39;t accept.
+<b class="nc"><i>430</i>&nbsp;      }</b>
+<b class="nc"><i>431</i>&nbsp;    }</b>
+<b class="nc"><i>432</i>&nbsp;    return jsonObject;</b>
+<i>433</i>&nbsp;  }
+<i>434</i>&nbsp;
+<i>435</i>&nbsp;  /**
+<i>436</i>&nbsp;   * Wraps the given object if necessary. {@link JSONObject#wrap(Object)} is only available on API
+<i>437</i>&nbsp;   * 19+, so we&#39;ve copied the implementation. Deviates from the original implementation in that it
+<i>438</i>&nbsp;   * always returns {@link JSONObject#NULL} instead of {@code null} in case of a failure, and
+<i>439</i>&nbsp;   * returns the {@link Object#toString} of any object that is of a custom (non-primitive or
+<i>440</i>&nbsp;   * non-collection/map) type.
+<i>441</i>&nbsp;   *
+<i>442</i>&nbsp;   * &lt;p&gt;If the object is null returns {@link JSONObject#NULL}. If the object is a {@link JSONArray}
+<i>443</i>&nbsp;   * or {@link JSONObject}, no wrapping is necessary. If the object is {@link JSONObject#NULL}, no
+<i>444</i>&nbsp;   * wrapping is necessary. If the object is an array or {@link Collection}, returns an equivalent
+<i>445</i>&nbsp;   * {@link JSONArray}. If the object is a {@link Map}, returns an equivalent {@link JSONObject}. If
+<i>446</i>&nbsp;   * the object is a primitive wrapper type or {@link String}, returns the object. Otherwise returns
+<i>447</i>&nbsp;   * the result of {@link Object#toString}. If wrapping fails, returns JSONObject.NULL.
+<i>448</i>&nbsp;   */
+<i>449</i>&nbsp;  private static Object wrap(Object o) {
+<b class="nc"><i>450</i>&nbsp;    if (o == null) {</b>
+<b class="nc"><i>451</i>&nbsp;      return JSONObject.NULL;</b>
+<i>452</i>&nbsp;    }
+<b class="nc"><i>453</i>&nbsp;    if (o instanceof JSONArray || o instanceof JSONObject) {</b>
+<b class="nc"><i>454</i>&nbsp;      return o;</b>
+<i>455</i>&nbsp;    }
+<b class="nc"><i>456</i>&nbsp;    if (o.equals(JSONObject.NULL)) {</b>
+<b class="nc"><i>457</i>&nbsp;      return o;</b>
+<i>458</i>&nbsp;    }
+<i>459</i>&nbsp;    try {
+<b class="nc"><i>460</i>&nbsp;      if (o instanceof Collection) {</b>
+<b class="nc"><i>461</i>&nbsp;        return new JSONArray((Collection) o);</b>
+<b class="nc"><i>462</i>&nbsp;      } else if (o.getClass().isArray()) {</b>
+<b class="nc"><i>463</i>&nbsp;        final int length = Array.getLength(o);</b>
+<b class="nc"><i>464</i>&nbsp;        JSONArray array = new JSONArray();</b>
+<b class="nc"><i>465</i>&nbsp;        for (int i = 0; i &lt; length; ++i) {</b>
+<b class="nc"><i>466</i>&nbsp;          array.put(wrap(Array.get(array, i)));</b>
+<i>467</i>&nbsp;        }
+<b class="nc"><i>468</i>&nbsp;        return array;</b>
+<i>469</i>&nbsp;      }
+<b class="nc"><i>470</i>&nbsp;      if (o instanceof Map) {</b>
+<i>471</i>&nbsp;        //noinspection unchecked
+<b class="nc"><i>472</i>&nbsp;        return toJsonObject((Map) o);</b>
+<i>473</i>&nbsp;      }
+<b class="nc"><i>474</i>&nbsp;      if (o instanceof Boolean</b>
+<i>475</i>&nbsp;          || o instanceof Byte
+<i>476</i>&nbsp;          || o instanceof Character
+<i>477</i>&nbsp;          || o instanceof Double
+<i>478</i>&nbsp;          || o instanceof Float
+<i>479</i>&nbsp;          || o instanceof Integer
+<i>480</i>&nbsp;          || o instanceof Long
+<i>481</i>&nbsp;          || o instanceof Short
+<i>482</i>&nbsp;          || o instanceof String) {
+<b class="nc"><i>483</i>&nbsp;        return o;</b>
+<i>484</i>&nbsp;      }
+<i>485</i>&nbsp;      // Deviate from original implementation and return the String representation of the object
+<i>486</i>&nbsp;      // regardless of package.
+<b class="nc"><i>487</i>&nbsp;      return o.toString();</b>
+<b class="nc"><i>488</i>&nbsp;    } catch (Exception ignored) {</b>
+<i>489</i>&nbsp;    }
+<i>490</i>&nbsp;    // Deviate from original and return JSONObject.NULL instead of null.
+<b class="nc"><i>491</i>&nbsp;    return JSONObject.NULL;</b>
+<i>492</i>&nbsp;  }
+<i>493</i>&nbsp;
+<i>494</i>&nbsp;  public static &lt;T&gt; Map&lt;String, T&gt; createMap() {
+<b class="nc"><i>495</i>&nbsp;    return new NullableConcurrentHashMap&lt;&gt;();</b>
+<i>496</i>&nbsp;  }
+<i>497</i>&nbsp;
+<i>498</i>&nbsp;  /** Ensures that a directory is created in the given location, throws an IOException otherwise. */
+<i>499</i>&nbsp;  public static void createDirectory(File location) throws IOException {
+<b class="nc"><i>500</i>&nbsp;    if (!(location.exists() || location.mkdirs() || location.isDirectory())) {</b>
+<b class="nc"><i>501</i>&nbsp;      throw new IOException(&quot;Could not create directory at &quot; + location);</b>
+<i>502</i>&nbsp;    }
+<i>503</i>&nbsp;  }
+<i>504</i>&nbsp;
+<i>505</i>&nbsp;  /** Copies all the values from {@code src} to {@code target}. */
+<i>506</i>&nbsp;  public static void copySharedPreferences(SharedPreferences src, SharedPreferences target) {
+<b class="nc"><i>507</i>&nbsp;    SharedPreferences.Editor editor = target.edit();</b>
+<b class="nc"><i>508</i>&nbsp;    for (Map.Entry&lt;String, ?&gt; entry : src.getAll().entrySet()) {</b>
+<b class="nc"><i>509</i>&nbsp;      String key = entry.getKey();</b>
+<b class="nc"><i>510</i>&nbsp;      Object value = entry.getValue();</b>
+<b class="nc"><i>511</i>&nbsp;      if (value instanceof String) {</b>
+<b class="nc"><i>512</i>&nbsp;        editor.putString(key, (String) value);</b>
+<b class="nc"><i>513</i>&nbsp;      } else if (value instanceof Set) {</b>
+<b class="nc"><i>514</i>&nbsp;        editor.putStringSet(key, (Set&lt;String&gt;) value);</b>
+<b class="nc"><i>515</i>&nbsp;      } else if (value instanceof Integer) {</b>
+<b class="nc"><i>516</i>&nbsp;        editor.putInt(key, (Integer) value);</b>
+<b class="nc"><i>517</i>&nbsp;      } else if (value instanceof Long) {</b>
+<b class="nc"><i>518</i>&nbsp;        editor.putLong(key, (Long) value);</b>
+<b class="nc"><i>519</i>&nbsp;      } else if (value instanceof Float) {</b>
+<b class="nc"><i>520</i>&nbsp;        editor.putFloat(key, (Float) value);</b>
+<b class="nc"><i>521</i>&nbsp;      } else if (value instanceof Boolean) {</b>
+<b class="nc"><i>522</i>&nbsp;        editor.putBoolean(key, (Boolean) value);</b>
+<i>523</i>&nbsp;      }
+<b class="nc"><i>524</i>&nbsp;    }</b>
+<b class="nc"><i>525</i>&nbsp;    editor.apply();</b>
+<i>526</i>&nbsp;  }
+<i>527</i>&nbsp;
+<b class="nc"><i>528</i>&nbsp;  private Utils() {</b>
+<b class="nc"><i>529</i>&nbsp;    throw new AssertionError(&quot;No instances&quot;);</b>
+<i>530</i>&nbsp;  }
+<i>531</i>&nbsp;
+<i>532</i>&nbsp;  /**
+<i>533</i>&nbsp;   * A {@link ThreadPoolExecutor} implementation by {@link com.segment.analytics.Analytics}
+<i>534</i>&nbsp;   * instances. Exists as a custom type so that we can differentiate the use of defaults versus a
+<i>535</i>&nbsp;   * user-supplied instance.
+<i>536</i>&nbsp;   */
+<i>537</i>&nbsp;  public static class AnalyticsNetworkExecutorService extends ThreadPoolExecutor {
+<i>538</i>&nbsp;
+<i>539</i>&nbsp;    private static final int DEFAULT_THREAD_COUNT = 1;
+<i>540</i>&nbsp;    // At most we perform two network requests concurrently
+<i>541</i>&nbsp;    private static final int MAX_THREAD_COUNT = 2;
+<i>542</i>&nbsp;
+<i>543</i>&nbsp;    public AnalyticsNetworkExecutorService() {
+<i>544</i>&nbsp;      //noinspection Convert2Diamond
+<b class="nc"><i>545</i>&nbsp;      super(</b>
+<i>546</i>&nbsp;          DEFAULT_THREAD_COUNT,
+<i>547</i>&nbsp;          MAX_THREAD_COUNT,
+<i>548</i>&nbsp;          0,
+<i>549</i>&nbsp;          TimeUnit.MILLISECONDS,
+<i>550</i>&nbsp;          new LinkedBlockingQueue&lt;Runnable&gt;(),
+<i>551</i>&nbsp;          new AnalyticsThreadFactory());
+<i>552</i>&nbsp;    }
+<i>553</i>&nbsp;  }
+<i>554</i>&nbsp;
+<b class="nc"><i>555</i>&nbsp;  public static class AnalyticsThreadFactory implements ThreadFactory {</b>
+<i>556</i>&nbsp;
+<i>557</i>&nbsp;    @SuppressWarnings(&quot;NullableProblems&quot;)
+<i>558</i>&nbsp;    public Thread newThread(Runnable r) {
+<b class="nc"><i>559</i>&nbsp;      return new AnalyticsThread(r);</b>
+<i>560</i>&nbsp;    }
+<i>561</i>&nbsp;  }
+<i>562</i>&nbsp;
+<i>563</i>&nbsp;  private static class AnalyticsThread extends Thread {
+<i>564</i>&nbsp;
+<b class="nc"><i>565</i>&nbsp;    private static final AtomicInteger SEQUENCE_GENERATOR = new AtomicInteger(1);</b>
+<i>566</i>&nbsp;
+<i>567</i>&nbsp;    public AnalyticsThread(Runnable r) {
+<b class="nc"><i>568</i>&nbsp;      super(r, THREAD_PREFIX + SEQUENCE_GENERATOR.getAndIncrement());</b>
+<i>569</i>&nbsp;    }
+<i>570</i>&nbsp;
+<i>571</i>&nbsp;    @Override
+<i>572</i>&nbsp;    public void run() {
+<b class="nc"><i>573</i>&nbsp;      Process.setThreadPriority(THREAD_PRIORITY_BACKGROUND);</b>
+<b class="nc"><i>574</i>&nbsp;      super.run();</b>
+<i>575</i>&nbsp;    }
+<i>576</i>&nbsp;  }
+<i>577</i>&nbsp;
+<i>578</i>&nbsp;  /** A {@link ConcurrentHashMap} that rejects null keys and values instead of failing. */
+<i>579</i>&nbsp;  public static class NullableConcurrentHashMap&lt;K, V&gt; extends ConcurrentHashMap&lt;K, V&gt; {
+<i>580</i>&nbsp;
+<i>581</i>&nbsp;    public NullableConcurrentHashMap() {
+<b class="nc"><i>582</i>&nbsp;      super();</b>
+<i>583</i>&nbsp;    }
+<i>584</i>&nbsp;
+<i>585</i>&nbsp;    public NullableConcurrentHashMap(Map&lt;? extends K, ? extends V&gt; m) {
+<b class="nc"><i>586</i>&nbsp;      super(m);</b>
+<i>587</i>&nbsp;    }
+<i>588</i>&nbsp;
+<i>589</i>&nbsp;    @Override
+<i>590</i>&nbsp;    public V put(K key, V value) {
+<b class="nc"><i>591</i>&nbsp;      if (key == null || value == null) {</b>
+<b class="nc"><i>592</i>&nbsp;        return null;</b>
+<i>593</i>&nbsp;      }
+<b class="nc"><i>594</i>&nbsp;      return super.put(key, value);</b>
+<i>595</i>&nbsp;    }
+<i>596</i>&nbsp;
+<i>597</i>&nbsp;    @Override
+<i>598</i>&nbsp;    public void putAll(Map&lt;? extends K, ? extends V&gt; m) {
+<b class="nc"><i>599</i>&nbsp;      for (Map.Entry&lt;? extends K, ? extends V&gt; e : m.entrySet()) {</b>
+<b class="nc"><i>600</i>&nbsp;        put(e.getKey(), e.getValue());</b>
+<b class="nc"><i>601</i>&nbsp;      }</b>
+<i>602</i>&nbsp;    }
+<i>603</i>&nbsp;  }
+<i>604</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-24 19:51</div>
+</div>
+</body>
+</html>
