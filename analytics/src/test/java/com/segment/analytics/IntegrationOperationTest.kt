@@ -15,7 +15,7 @@ import java.util.*
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
-class IntegrationOperationTestKt {
+class IntegrationOperationTest {
     @Mock lateinit var integration: Integration<Void>
 
     @Before
