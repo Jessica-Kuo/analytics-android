@@ -143,7 +143,7 @@ class ValueMapTestKt {
         VALUE2
     }
 
-    @Throws(Exception::class)
+    /*@Throws(Exception::class)
     @Test
     fun customJsonMapDeserialization() {
         val settings = ValueMapTest.Settings(cartographer.fromJson(PROJECT_SETTINGS_JSON_SAMPLE))
@@ -173,7 +173,7 @@ class ValueMapTestKt {
                                 java.lang.NoSuchMethodException: com.segment.analytics.ValueMapTest${"$"}AmplitudeSettings.<init>(java.util.Map)
                                 """)
         }
-    }
+    } */
 
     @Throws(Exception::class)
     @Test
@@ -265,7 +265,7 @@ class ValueMapTestKt {
     }
 
 
-    class Settings(fromJson: MutableMap<String, Any>) : ValueMap()
+    /*class Settings(fromJson: MutableMap<String, Any>) : ValueMap()
     {
         @Throws(IOException::class)
         fun Settings(map: Map<String?, Any?>?) {
@@ -287,6 +287,6 @@ class ValueMapTestKt {
         init {
             throw AssertionError("string constuctors must not be called when deserializing")
         }
-    }
+    }*/
 
 }

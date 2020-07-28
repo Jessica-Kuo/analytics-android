@@ -12,7 +12,7 @@
 
     @RunWith(RobolectricTestRunner::class)
     @Config(manifest = Config.NONE)
-    class CryptoTestKt{
+    class CryptoTest{
 
         @Throws(IOException::class)
         @Test
